@@ -1,0 +1,27 @@
+@import "../../../global/styles/base";
+
+.category{
+  display: flex;
+  justify-content: space-between;
+
+  .title{
+    display: flex;
+    align-items: center;
+
+    .expand{
+
+    }
+  }
+  .actions{
+    display: flex;
+    .edit{
+
+    }
+    .remove{
+
+    }
+    .add{
+
+    }
+  }
+}

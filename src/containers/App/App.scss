@@ -1,5 +1,6 @@
+@import "../../global/styles/variables";
+@import "../../global/styles/base";
+
 .app{
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
+  @extend .stretch-to-full-container-as-column;
 }

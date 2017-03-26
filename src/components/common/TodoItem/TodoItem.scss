@@ -1,0 +1,22 @@
+@import "../../../global/styles/base";
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+
+  .title {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+  }
+
+  .actions {
+    display: flex;
+
+    .edit {
+
+    }
+  }
+}

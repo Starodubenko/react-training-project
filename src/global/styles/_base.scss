@@ -1,0 +1,15 @@
+.stretch-to-full-container{
+  display: flex;
+  flex-grow: 1;
+}
+
+.stretch-to-full-container-as-column{
+  @extend .stretch-to-full-container;
+  flex-direction: column;
+}
+
+.stretch-to-full-container-as-row{
+  @extend .stretch-to-full-container;
+  flex-direction: row;
+}
+
