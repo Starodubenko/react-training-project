@@ -2,7 +2,7 @@ import * as React from "react";
 import {AddInputString, Category} from "../../components";
 
 import "./TodoList.scss"
-import {Paper} from "material-ui";
+import {LinearProgress, Paper} from "material-ui";
 import {TodoItem} from "../../components/common/TodoItem/TodoItem";
 
 export class TodoList extends React.Component {
@@ -44,7 +44,7 @@ export class TodoList extends React.Component {
     render() {
         return (
             <div className="todo-list">
-                <div className="todo-progress">progress</div>
+                <LinearProgress mode="determinate" color={"#37FF01"} style={{height: '15px', backgroundColor: 'white'}} value={50} />
                 <div className="content">
                     <div className="left">
                         <AddInputString hint={"Enter category title"} addEvent={this.addCategoryTitle}/>
