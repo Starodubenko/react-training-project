@@ -196,6 +196,7 @@ export class TodoList extends React.Component {
                             <TodoItem title={"To do item"} editEvent={this.editItem}/>
                             <TodoItem title={"To do item"} editEvent={this.editItem}/>
                         </div>
+                        {this.props.children}
                     </div>
                 </div>
             </div>

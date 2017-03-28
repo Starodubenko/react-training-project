@@ -27,6 +27,8 @@
       @extend .stretch-to-full-container-as-column;
       border-top: 1px solid #cfcfcf;
       padding: 10px;
+      position: relative;
+      overflow-x: hidden;
 
       .item-list{
         border-top: 1px solid grey;
