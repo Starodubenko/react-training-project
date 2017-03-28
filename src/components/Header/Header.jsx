@@ -6,6 +6,7 @@ import "./Header.scss"
 import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
 import {routerActions} from "react-router-redux";
+import {Search} from "../common/Search/Search";
 
 @connect((store) => {
     return {
@@ -25,7 +26,7 @@ export class Header extends React.Component {
                 <AppBar
                     title="To-Do List"
                     iconElementLeft={<IconButton onClick={this.handleIconClick.bind(this)}></IconButton>}
-                    // iconElementRight={<Search />}
+                    iconElementRight={<Search />}
                 />
             </div>
         );
