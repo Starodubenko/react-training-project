@@ -10,70 +10,28 @@ export class TodoList extends React.Component {
     constructor() {
         super();
         this.addCategoryTitle = this.addCategoryTitle.bind(this);
-        this.editCategory = this.editCategory.bind(this);
-        this.removeCategory = this.removeCategory.bind(this);
-        this.newCategory = this.newCategory.bind(this);
         this.addItem = this.addItem.bind(this);
         this.editItem = this.editItem.bind(this);
-        this.createCategoryTree = this.createCategoryTree.bind(this);
-    }
 
-    addCategoryTitle() {
-        console.log("The category have been added");
-    }
-
-    editCategory(category) {
-        console.log("The category is being edited");
-    }
-
-    removeCategory(category) {
-        console.log("The category have been removed");
-    }
-
-    newCategory() {
-        console.log("A new category is creating");
-    }
-
-    addItem() {
-        console.log("The category have been added");
-    }
-
-    editItem() {
-        console.log("The item is being edited");
-    }
-
-    createCategoryTree(data, editCategory, removeCategory, newCategory, createCategoryTree) {
-        let result = [];
-        data.forEach((category, index) => {
-            result.push(
-                <Category key={index}
-                          data={category}
-                          editEvent={editCategory}
-                          removeEvent={removeCategory}
-                          newEvent={newCategory}
-                          createCategoryTree={createCategoryTree}/>
-            )
-        });
-        return result;
-    }
-
-    render() {
-
-        let data = [
+        this.state = { data: [
             {
+                id: 1,
                 title: "Category #1",
                 todoList: [
                     {
+                        id: 1,
                         title: "Todo title #1",
                         description: "Todo title #1 Todo title #1 Todo title #1 Todo title #1 ",
                         isDone: false
                     },
                     {
+                        id: 2,
                         title: "Todo title #2",
                         description: "Todo title #1 Todo title #1 Todo title #1 Todo title #1 ",
                         isDone: false
                     },
                     {
+                        id: 3,
                         title: "Todo title #3",
                         description: "Todo title #1 Todo title #1 Todo title #1 Todo title #1 ",
                         isDone: false
@@ -81,10 +39,12 @@ export class TodoList extends React.Component {
                 ],
                 children: [
                     {
-                        title: "Category #11",
+                        id: 2,
+                        title: "Category #2",
                         todoList: [
                             {
-                                title: "Todo title #11",
+                                id: 4,
+                                title: "Todo title #4",
                                 description: "Todo title #1 Todo title #1 Todo title #1 Todo title #1 ",
                                 isDone: false
                             }
@@ -92,20 +52,24 @@ export class TodoList extends React.Component {
                         children: []
                     },
                     {
-                        title: "Category #11",
+                        id: 3,
+                        title: "Category #3",
                         todoList: [
                             {
-                                title: "Todo title #11",
+                                id: 5,
+                                title: "Todo title #5",
                                 description: "Todo title #1 Todo title #1 Todo title #1 Todo title #1 ",
                                 isDone: false
                             }
                         ],
                         children: [
                             {
-                                title: "Category #11",
+                                id: 4,
+                                title: "Category #4",
                                 todoList: [
                                     {
-                                        title: "Todo title #11",
+                                        id: 6,
+                                        title: "Todo title #6",
                                         description: "Todo title #1 Todo title #1 Todo title #1 Todo title #1 ",
                                         isDone: false
                                     }
@@ -117,30 +81,36 @@ export class TodoList extends React.Component {
                 ]
             },
             {
-                title: "Category #1",
+                id: 5,
+                title: "Category #5",
                 todoList: [
                     {
-                        title: "Todo title #1",
+                        id: 7,
+                        title: "Todo title #7",
                         description: "Todo title #1 Todo title #1 Todo title #1 Todo title #1 ",
                         isDone: false
                     },
                     {
-                        title: "Todo title #2",
+                        id: 8,
+                        title: "Todo title #8",
                         description: "Todo title #1 Todo title #1 Todo title #1 Todo title #1 ",
                         isDone: false
                     },
                     {
-                        title: "Todo title #3",
+                        id: 9,
+                        title: "Todo title #9",
                         description: "Todo title #1 Todo title #1 Todo title #1 Todo title #1 ",
                         isDone: false
                     },
                 ],
                 children: [
                     {
-                        title: "Category #11",
+                        id: 6,
+                        title: "Category #6",
                         todoList: [
                             {
-                                title: "Todo title #11",
+                                id: 10,
+                                title: "Todo title #10",
                                 description: "Todo title #1 Todo title #1 Todo title #1 Todo title #1 ",
                                 isDone: false
                             }
@@ -148,9 +118,11 @@ export class TodoList extends React.Component {
                         children: []
                     },
                     {
-                        title: "Category #11",
+                        id: 7,
+                        title: "Category #7",
                         todoList: [
                             {
+                                id: 11,
                                 title: "Todo title #11",
                                 description: "Todo title #1 Todo title #1 Todo title #1 Todo title #1 ",
                                 isDone: false
@@ -158,10 +130,12 @@ export class TodoList extends React.Component {
                         ],
                         children: [
                             {
-                                title: "Category #11",
+                                id: 8,
+                                title: "Category #8",
                                 todoList: [
                                     {
-                                        title: "Todo title #11",
+                                        id: 12,
+                                        title: "Todo title #12",
                                         description: "Todo title #1 Todo title #1 Todo title #1 Todo title #1 ",
                                         isDone: false
                                     }
@@ -172,19 +146,30 @@ export class TodoList extends React.Component {
                     },
                 ]
             }
-        ];
+        ]}
+    }
 
-        let categories = this.createCategoryTree(data, this.editCategory, this.removeCategory, this.newCategory, this.createCategoryTree);
+    addCategoryTitle() {
+        console.log("The category have been added");
+    }
 
+    addItem() {
+        console.log("The category have been added");
+    }
+
+    editItem() {
+        console.log("The item is being edited");
+    }
+
+    render() {
         return (
             <div className="todo-list">
-                <LinearProgress mode="determinate" color={"#37FF01"} style={{height: '15px', backgroundColor: 'white'}}
-                                value={50}/>
+                <LinearProgress mode="determinate" color={"#37FF01"} style={{height: '15px', backgroundColor: 'white'}} value={50}/>
                 <div className="content">
                     <div className="left">
                         <AddInputString hint={"Enter category title"} addEvent={this.addCategoryTitle}/>
                         <div className="category-list">
-                            {categories}
+                            <Category data={this.state.data} />
                         </div>
                     </div>
                     <div className="right">

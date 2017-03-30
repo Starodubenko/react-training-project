@@ -16,7 +16,6 @@ export class Search extends React.Component {
     }
 
     clearSearchString() {
-        debugger;
         this.setState({searchRow: ""})
     }
 
@@ -26,7 +25,6 @@ export class Search extends React.Component {
 
     render() {
         // let {hint, addEvent, isRightHorAlignment} = this.props;
-        debugger;
         return (
             <div className="search">
                 <label htmlFor="search-field" className="search-field-label">
