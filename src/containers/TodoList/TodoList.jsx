@@ -1,4 +1,5 @@
 import * as React from "react";
+import {normalize, schema} from 'normalizr';
 import {AddInputString, Category} from "../../components";
 
 import "./TodoList.scss"
@@ -17,7 +18,9 @@ export class TodoList extends React.Component {
         this.editCategory = this.editCategory.bind(this);
         this.removeCategory = this.removeCategory.bind(this);
 
-        this.state = { data: [
+        this.createCategoryTree = this.createCategoryTree.bind(this);
+
+        let dataFromRest = [
             {
                 id: 1,
                 title: "Category #1",
@@ -41,7 +44,7 @@ export class TodoList extends React.Component {
                         isDone: false
                     },
                 ],
-                children: [
+                categories: [
                     {
                         id: 2,
                         title: "Category #2",
@@ -53,7 +56,7 @@ export class TodoList extends React.Component {
                                 isDone: false
                             }
                         ],
-                        children: []
+                        categories: []
                     },
                     {
                         id: 3,
@@ -66,7 +69,7 @@ export class TodoList extends React.Component {
                                 isDone: false
                             }
                         ],
-                        children: [
+                        categories: [
                             {
                                 id: 4,
                                 title: "Category #4",
@@ -78,7 +81,7 @@ export class TodoList extends React.Component {
                                         isDone: false
                                     }
                                 ],
-                                children: []
+                                categories: []
                             },
                         ]
                     },
@@ -107,7 +110,7 @@ export class TodoList extends React.Component {
                         isDone: false
                     },
                 ],
-                children: [
+                categories: [
                     {
                         id: 6,
                         title: "Category #6",
@@ -119,7 +122,7 @@ export class TodoList extends React.Component {
                                 isDone: false
                             }
                         ],
-                        children: []
+                        categories: []
                     },
                     {
                         id: 7,
@@ -132,7 +135,7 @@ export class TodoList extends React.Component {
                                 isDone: false
                             }
                         ],
-                        children: [
+                        categories: [
                             {
                                 id: 8,
                                 title: "Category #8",
@@ -144,13 +147,22 @@ export class TodoList extends React.Component {
                                         isDone: false
                                     }
                                 ],
-                                children: []
+                                categories: []
                             },
                         ]
                     },
                 ]
             }
-        ]}
+        ];
+
+        const todoSchema = new schema.Entity('todo');
+        const categorySchema = new schema.Entity('category');
+        categorySchema.define({
+            todoList: [todoSchema],
+            categories: [categorySchema]
+        });
+        const data = normalize(dataFromRest, [categorySchema]);
+        this.state = {data: data}
     }
 
     addCategoryTitle() {
@@ -174,31 +186,27 @@ export class TodoList extends React.Component {
         console.log("The category is being edited");
     }
 
-    removeCategory(pathIndexes) {
-        let result = this.findAndDelete(this.state.data, pathIndexes);
-        this.setState({data: result});
+    removeCategory(parentId, id) {
+        let updatedData = this.state.data;
+        if (parentId){
+            let children = updatedData.entities.category[parentId].categories;
+            children.splice(children.indexOf(id), 1);
+        } else {
+            updatedData.result.splice(updatedData.result.indexOf(id), 1);
+        }
+        this.setState({data: updatedData});
         console.log("The category have been removed");
     }
 
-    findAndDelete(categories, pathIndexes) {
-        let currentChild;
-        if (pathIndexes.length === 1){
-            categories.splice(pathIndexes[0],1)
-        } else {
-            pathIndexes.forEach((pathIndex,index)  => {
-                if (currentChild){
-                    if (index === pathIndexes.length - 1) {
-                        currentChild.children.splice(pathIndex,1)
-                    } else {
-                        currentChild = currentChild.children[pathIndex];
-                    }
-
-                } else {
-                    currentChild = categories[pathIndex];
-                }
-            });
-        }
-        return categories;
+    createCategoryTree(serviceActions, categoryIds, parentId) {
+        let entities = this.state.data.entities;
+        return categoryIds.map((id) => {
+            return <Category key={id}
+                             serviceActions={serviceActions}
+                             categoryData={entities.category[id]}
+                             parentId={parentId}
+            />
+        });
     }
 
     render() {
@@ -207,16 +215,20 @@ export class TodoList extends React.Component {
             newCategory: this.newCategory,
             editCategory: this.editCategory,
             removeCategory: this.removeCategory,
+            createCategoryTree: this.createCategoryTree,
         };
+
+        let categoryList = this.createCategoryTree(serviceActions, this.state.data.result, null);
 
         return (
             <div className="todo-list">
-                <LinearProgress mode="determinate" color={"#37FF01"} style={{height: '15px', backgroundColor: 'white'}} value={50}/>
+                <LinearProgress mode="determinate" color={"#37FF01"} style={{height: '15px', backgroundColor: 'white'}}
+                                value={50}/>
                 <div className="content">
                     <div className="left">
                         <AddInputString hint={"Enter category title"} addEvent={this.addCategoryTitle}/>
                         <div className="category-list">
-                            <Category serviceActions={serviceActions} data={this.state.data} />
+                            {categoryList}
                         </div>
                     </div>
                     <div className="right">
