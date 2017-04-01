@@ -5,8 +5,11 @@ import "./AddInputString.scss"
 
 export class AddInputString extends React.Component {
 
-    constructor(){
+    constructor() {
         super();
+        this.handleChange = this.handleChange.bind(this);
+        this.onClickHandler = this.onClickHandler.bind(this);
+        this.handleKeyPress = this.handleKeyPress.bind(this);
 
         this.state = {
             leftHorizontalAlign: {
@@ -18,14 +21,35 @@ export class AddInputString extends React.Component {
         }
     }
 
+    handleChange(e) {
+        this.setState({value: e.target.value});
+    }
+
+    handleKeyPress(e) {
+        if (e.key === 'Enter' && this.state.value) {
+            this.props.addEvent(e.target.value);
+            this.setState({value: ""});
+        }
+    }
+
+    onClickHandler(){
+        if (this.state.value){
+            this.props.addEvent(this.state.value);
+            this.setState({value: ""});
+        }
+    }
+
     render() {
-        let {hint, addEvent, isRightHorAlignment} = this.props;
+        let {hint, isRightHorAlignment} = this.props;
         return (
-            <div className="add-input-string" style={isRightHorAlignment ? this.state.rightHorizontalAlign : this.state.leftHorizontalAlign}>
-                <TextField
-                    hintText={hint}
+            <div className="add-input-string"
+                 style={isRightHorAlignment ? this.state.rightHorizontalAlign : this.state.leftHorizontalAlign}>
+                <TextField onChange={ this.handleChange }
+                           onKeyPress={ this.handleKeyPress }
+                           hintText={hint}
+                           value={this.state.value}
                 />
-                <FlatButton label="Add" onClick={addEvent} />
+                <FlatButton label="Add" onClick={this.onClickHandler}/>
             </div>
         )
     }
