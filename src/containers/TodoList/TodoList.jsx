@@ -13,6 +13,10 @@ export class TodoList extends React.Component {
         this.addItem = this.addItem.bind(this);
         this.editItem = this.editItem.bind(this);
 
+        this.newCategory = this.newCategory.bind(this);
+        this.editCategory = this.editCategory.bind(this);
+        this.removeCategory = this.removeCategory.bind(this);
+
         this.state = { data: [
             {
                 id: 1,
@@ -161,7 +165,50 @@ export class TodoList extends React.Component {
         console.log("The item is being edited");
     }
 
+
+    newCategory() {
+        console.log("A new category is creating");
+    }
+
+    editCategory() {
+        console.log("The category is being edited");
+    }
+
+    removeCategory(pathIndexes) {
+        let result = this.findAndDelete(this.state.data, pathIndexes);
+        this.setState({data: result});
+        console.log("The category have been removed");
+    }
+
+    findAndDelete(categories, pathIndexes) {
+        let currentChild;
+        if (pathIndexes.length === 1){
+            categories.splice(pathIndexes[0],1)
+        } else {
+            pathIndexes.forEach((pathIndex,index)  => {
+                if (currentChild){
+                    if (index === pathIndexes.length - 1) {
+                        currentChild.children.splice(pathIndex,1)
+                    } else {
+                        currentChild = currentChild.children[pathIndex];
+                    }
+
+                } else {
+                    currentChild = categories[pathIndex];
+                }
+            });
+        }
+        return categories;
+    }
+
     render() {
+
+        let serviceActions = {
+            newCategory: this.newCategory,
+            editCategory: this.editCategory,
+            removeCategory: this.removeCategory,
+        };
+
         return (
             <div className="todo-list">
                 <LinearProgress mode="determinate" color={"#37FF01"} style={{height: '15px', backgroundColor: 'white'}} value={50}/>
@@ -169,7 +216,7 @@ export class TodoList extends React.Component {
                     <div className="left">
                         <AddInputString hint={"Enter category title"} addEvent={this.addCategoryTitle}/>
                         <div className="category-list">
-                            <Category data={this.state.data} />
+                            <Category serviceActions={serviceActions} data={this.state.data} />
                         </div>
                     </div>
                     <div className="right">

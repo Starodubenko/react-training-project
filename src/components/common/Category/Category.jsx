@@ -15,12 +15,20 @@ export class Category extends React.Component {
     constructor() {
         super();
         this.state = {
-            isChildrenCollapsed: true
+            isChildrenCollapsed: true,
+            isChildrenEmpty: true,
         };
         this.expandCategory = this.expandCategory.bind(this);
-        this.newCategory = this.newCategory.bind(this);
-        this.editCategory = this.editCategory.bind(this);
-        this.removeCategory = this.removeCategory.bind(this);
+        // if (this.props.data.children && this.props.data.children.length < 1){
+        //     this.setState({
+        //         isChildrenCollapsed: true,
+        //         isChildrenEmpty: true
+        //     });
+        // } else {
+        //     this.setState({
+        //         isChildrenEmpty: false
+        //     });
+        // }
     }
 
     expandCategory() {
@@ -33,78 +41,50 @@ export class Category extends React.Component {
         }
     }
 
-    newCategory() {
-        console.log("A new category is creating");
-    }
-
-    editCategory() {
-        console.log("The category is being edited");
-    }
-
-    removeCategory() {
-        let result = this.findAndDelere(this.props.fullTree, this.props.pathIndexes);
-        console.log("The category have been removed");
-    }
-
-    findAndDelere(categories, pathIndexes) {
-        let currentChild;
-        pathIndexes.forEach(index => {
-            if (index == 0) {
-                currentChild = categories[index];
-            } else {
-                if (currentChild.children && currentChild.children.children) {
-                    currentChild = currentChild.children[index];
-                } else {
-                    currentChild.children.splice(index, 1);
-                }
-            }
-        });
-        return categories;
-    }
-
-    createCategoryTree(data, fullTree, pathIndexes) {
+    createCategoryTree(serviceActions, data, pathIndexes) {
         let result = [];
         data.forEach((category, index) => {
             result.push(
-                <Category key={index} data={category} fullTree={fullTree} pathIndexes={[...pathIndexes, index]}/>
+                <Category key={index} serviceActions={serviceActions} data={category} pathIndexes={[...pathIndexes, index]}/>
             )
         });
         return result;
     }
 
     render() {
-        let {data, fullTree, pathIndexes} = this.props;
+        let {serviceActions, data, pathIndexes} = this.props;
         let childrenTree = data.children ?
-            this.createCategoryTree(data.children, fullTree, [...pathIndexes]) :
-            this.createCategoryTree(data, data, []);
+            this.createCategoryTree(serviceActions, data.children, [...pathIndexes]) :
+            this.createCategoryTree(serviceActions, data, []);
         return (
             <div className="category">
                 {data.children ? <Paper className="paper" zDepth={2} children={
                     <div className="main">
                         <div className="title">
                             <div className="expand">
-                                <IconButton>
-                                    {this.state.isChildrenCollapsed ?
-                                        <NavigationChevronRight onClick={this.expandCategory}/> :
-                                        <NavigationExpandMore onClick={this.expandCategory}/>}
-                                </IconButton>
+                                {data.children.length < 1 ? "" :
+                                    <IconButton>
+                                        {this.state.isChildrenCollapsed ?
+                                            <NavigationChevronRight onClick={this.expandCategory}/> :
+                                            <NavigationExpandMore onClick={this.expandCategory}/>}
+                                    </IconButton>}
                             </div>
                             {data.title}
                         </div>
                         <div className="actions">
                             <div className="edit">
                                 <IconButton>
-                                    <EditorModeEdit onClick={this.editCategory}/>
+                                    <EditorModeEdit onClick={serviceActions.editCategory}/>
                                 </IconButton>
                             </div>
                             <div className="remove">
                                 <IconButton>
-                                    <ActionDeleteForever onClick={this.removeCategory}/>
+                                    <ActionDeleteForever onClick={() => {serviceActions.removeCategory(pathIndexes)}}/>
                                 </IconButton>
                             </div>
                             <div className="add">
                                 <IconButton>
-                                    <ContentAddBox onClick={this.newCategory}/>
+                                    <ContentAddBox onClick={serviceActions.newCategory}/>
                                 </IconButton>
                             </div>
                         </div>
