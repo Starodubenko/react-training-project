@@ -56,7 +56,7 @@ export class AddInputStringDialog extends React.Component {
         return (
             <div className="add-input-string-dialog">
                 <Dialog
-                    title={}
+                    title={""}
                     actions={modalActions}
                     modal={true}
                     open={isOpened}
