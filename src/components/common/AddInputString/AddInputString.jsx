@@ -45,7 +45,6 @@ export class AddInputString extends React.Component {
             <div className="add-input-string"
                  style={isRightHorAlignment ? this.state.rightHorizontalAlign : this.state.leftHorizontalAlign}>
                 <TextField onChange={ this.handleChange }
-                           onKeyPress={ this.handleKeyPress }
                            hintText={hint}
                            value={this.state.value}
                 />

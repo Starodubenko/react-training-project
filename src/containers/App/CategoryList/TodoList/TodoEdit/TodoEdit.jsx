@@ -5,7 +5,6 @@ import "./TodoEdit.scss"
 
 
 @connect((store, ownProps) => {
-    debugger;
     return {
         currentToDoId: ownProps.params.id
     }

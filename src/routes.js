@@ -1,6 +1,6 @@
 import React, {Component}from "react";
 import {Router, Route, hashHistory, IndexRedirect} from "react-router";
-import {NotFound, App, TodoList, TodoEdit} from "./containers";
+import {NotFound, App, CategoryList, TodoList, TodoEdit} from "./containers";
 import { syncHistoryWithStore } from 'react-router-redux';
 
 export default class Routes extends Component{
@@ -9,12 +9,16 @@ export default class Routes extends Component{
         const {store} = this.props;
         const history = syncHistoryWithStore(hashHistory, store);
         return (
-            <Router history={history}>
+            <Router history={hashHistory}>
                 <Route path="/" component={App}>
-                    <Route path="todo-list" component={TodoList}>
-                        <Route path=":id/edit" component={TodoEdit}/>
+                    {/*//TodoList*/}
+                    <Route path="category-list" component={CategoryList}>
+                        <Route {...this.props} path=":id" component={TodoList}>
+                            {/*<Route path=":id" component={TodoView}/>*/}
+                            <Route {...this.props} path=":id/edit" component={TodoEdit}/>
+                        </Route>
                     </Route>
-                    <IndexRedirect to="/todo-list" />
+                    <IndexRedirect to="/category-list" />
                 </Route>
                 <Route path="*" component={NotFound}/>
             </Router>

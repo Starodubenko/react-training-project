@@ -3,6 +3,13 @@
 .category {
   display: flex;
   flex-direction: column;
+  text-decoration: none;
+
+  &.active{
+    > .paper {
+      background-color: #00bcd4!important;
+    }
+  }
 
   .paper {
     display: flex;
@@ -43,6 +50,11 @@
     .category:first-child {
       .paper {
         background-color: transparent !important;
+      }
+      &.active{
+        > .paper {
+          background-color: #00bcd4!important;
+        }
       }
     }
   }

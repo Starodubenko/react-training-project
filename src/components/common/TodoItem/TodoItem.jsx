@@ -11,12 +11,12 @@ export class TodoItem extends React.Component {
     }
 
     render() {
-        let {title, editEvent} = this.props;
+        let {data, editEvent} = this.props;
         return (
             <Paper zDepth={1} children={
                 <div className="todo-item">
                     <div className="title">
-                        <Checkbox label={title}/>
+                        <Checkbox label={data.title}/>
                     </div>
                     <div className="actions">
                         <div className="edit">

@@ -1,4 +1,5 @@
 export {NotFound} from './NotFound/NotFound';
 export {App} from "./App/App";
-export {TodoList} from './TodoList/TodoList';
-export {TodoEdit} from './TodoList/TodoEdit/TodoEdit';
+export {CategoryList} from './App/CategoryList/CategoryList';
+export {TodoList} from './App/CategoryList/TodoList/TodoList';
+export {TodoEdit} from './App/CategoryList/TodoList/TodoEdit/TodoEdit';

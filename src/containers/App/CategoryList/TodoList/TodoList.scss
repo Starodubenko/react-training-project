@@ -1,0 +1,41 @@
+@import "../../../../global/styles/base";
+
+.todo-list{
+  @extend .stretch-to-full-container-as-column;
+
+  .todo-progress{
+
+  }
+
+  .content{
+    @extend .stretch-to-full-container-as-row;
+
+    .left{
+      display: flex;
+      flex-shrink: 0;
+      flex-direction: column;
+      padding: 10px;
+      border: 1px solid #cfcfcf;
+
+      .category-list{
+        border-top: 1px solid grey;
+        padding: 10px 0;
+        overflow: auto;
+      }
+    }
+
+    .right{
+      @extend .stretch-to-full-container-as-column;
+      border-top: 1px solid #cfcfcf;
+      padding: 10px;
+      position: relative;
+      overflow-x: hidden;
+
+      .item-list{
+        border-top: 1px solid grey;
+        padding: 10px 0;
+        overflow: auto;
+      }
+    }
+  }
+}

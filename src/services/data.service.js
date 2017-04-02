@@ -1,25 +1,10 @@
-import * as React from "react";
 import {normalize, schema} from 'normalizr';
-import {AddInputString, Category} from "../../components";
 
-import "./TodoList.scss"
-import {LinearProgress, Paper} from "material-ui";
-import {TodoItem} from "../../components/common/TodoItem/TodoItem";
+export default class DataService{
 
-export class TodoList extends React.Component {
-
-    constructor() {
-        super();
-        this.addCategoryTitle = this.addCategoryTitle.bind(this);
-        this.addItem = this.addItem.bind(this);
-        this.editItem = this.editItem.bind(this);
-
-        this.newCategory = this.newCategory.bind(this);
-        this.editCategory = this.editCategory.bind(this);
-        this.removeCategory = this.removeCategory.bind(this);
-
-        this.removeFromTree = this.removeFromTree.bind(this);
-        this.createCategoryTree = this.createCategoryTree.bind(this);
+    constructor(){
+        this.instance = null;
+        this.data = null;
 
         let dataFromRest = [
             {
@@ -162,120 +147,24 @@ export class TodoList extends React.Component {
             todoList: [todoSchema],
             categories: [categorySchema]
         });
-        const data = normalize(dataFromRest, [categorySchema]);
-        this.state = {
-            data: data,
-            newCategoryPatern: {
-                id: null,
-                title: "",
-                todoList: [],
-                categories: []
-            }
-        }
+        this.data = normalize(dataFromRest, [categorySchema]);
+
     }
 
-    addCategoryTitle(value, parentId) {
-        let updatedData = this.state.data;
-        let newCategory = Object.assign({},this.state.newCategoryPatern);
-        newCategory.id = Math.round(Math.random()*10000);
-        newCategory.title = value;
-        updatedData.entities.category[newCategory.id] = newCategory;
-
-        if (parentId){
-            updatedData.entities.category[parentId].categories.push(newCategory.id);
+    static getInstance(){
+        if (this.instance){
+            return this.instance;
         } else {
-            updatedData.result.push(newCategory.id);
+            this.instance = new DataService();
+            return this.instance;
         }
-        this.setState({data: updatedData});
     }
 
-    addItem() {
-        console.log("The category have been added");
+    getData(){
+        return this.data;
     }
 
-    editItem() {
-        console.log("The item is being edited");
+    setData(newData){
+        this.data = newData;
     }
-
-
-    newCategory(parentId) {
-
-    }
-
-    editCategory() {
-        console.log("The category is being edited");
-    }
-
-    removeFromTree(parentId, id){
-        let updatedData = this.state.data;
-        if (parentId){
-            let children = updatedData.entities.category[parentId].categories;
-            [...updatedData.entities.category[id].categories].forEach((childId) => {
-                updatedData = this.removeFromTree(id, childId);
-            });
-            children.splice(children.indexOf(id), 1);
-            delete updatedData.entities.category[id];
-        } else {
-            [...updatedData.entities.category[id].categories].forEach((childId) => {
-                updatedData = this.removeFromTree(id, childId);
-            });
-            updatedData.result.splice(updatedData.result.indexOf(id), 1);
-            delete updatedData.entities.category[id];
-        }
-        return updatedData;
-    }
-
-    removeCategory(parentId, id) {
-        let result = this.removeFromTree(parentId, id);
-        this.setState({data: result});
-    }
-
-    createCategoryTree(serviceActions, categoryIds, parentId) {
-        let entities = this.state.data.entities;
-        return categoryIds.map((id) => {
-            return <Category key={id}
-                             serviceActions={serviceActions}
-                             categoryData={entities.category[id]}
-                             parentId={parentId}
-            />
-        });
-    }
-
-    render() {
-
-        let serviceActions = {
-            newCategory: this.newCategory,
-            editCategory: this.editCategory,
-            removeCategory: this.removeCategory,
-            createCategoryTree: this.createCategoryTree,
-        };
-
-        let categoryList = this.createCategoryTree(serviceActions, this.state.data.result, null);
-
-        return (
-            <div className="todo-list">
-                <LinearProgress mode="determinate" color={"#37FF01"} style={{height: '15px', backgroundColor: 'white'}}
-                                value={50}/>
-                <div className="content">
-                    <div className="left">
-                        <AddInputString hint={"Enter category title"} addEvent={this.addCategoryTitle}/>
-                        <div className="category-list">
-                            {categoryList}
-                        </div>
-                    </div>
-                    <div className="right">
-                        <AddInputString hint={"Enter item title"} addEvent={this.addItem} isRightHorAlignment={true}/>
-                        <div className="item-list">
-                            <TodoItem title={"To do item"} editEvent={this.editItem}/>
-                            <TodoItem title={"To do item"} editEvent={this.editItem}/>
-                            <TodoItem title={"To do item"} editEvent={this.editItem}/>
-                            <TodoItem title={"To do item"} editEvent={this.editItem}/>
-                            <TodoItem title={"To do item"} editEvent={this.editItem}/>
-                        </div>
-                        {this.props.children}
-                    </div>
-                </div>
-            </div>
-        )
-    }
-}
+};
