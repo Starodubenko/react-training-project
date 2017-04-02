@@ -10,15 +10,18 @@ import {
 import {hashHistory, Link} from 'react-router';
 
 import "./Category.scss"
+import {AddInputStringDialog} from "../AddInputStringDialog/AddInputStringDialog";
 
 export class Category extends React.Component {
 
     constructor() {
         super();
         this.state = {
-            isChildrenCollapsed: true
+            isChildrenCollapsed: true,
+            addEditDialog: false
         };
         this.expandCategory = this.expandCategory.bind(this);
+        this.visibilityTrigger = this.visibilityTrigger.bind(this);
     }
 
     expandCategory(e) {
@@ -30,6 +33,11 @@ export class Category extends React.Component {
                 }
             )
         }
+    }
+
+    visibilityTrigger(e){
+        // e.stopPropagation();
+        this.setState({addEditDialog: !this.state.addEditDialog})
     }
 
     render() {
@@ -63,7 +71,7 @@ export class Category extends React.Component {
                             </div>
                             <div className="add">
                                 <IconButton>
-                                    <ContentAddBox onClick={serviceActions.newCategory}/>
+                                    <ContentAddBox onClick={this.visibilityTrigger}/>
                                 </IconButton>
                             </div>
                         </div>
@@ -73,6 +81,7 @@ export class Category extends React.Component {
                     className={(categoryData.categories ? 'children ' : '') + (this.state.isChildrenCollapsed ? 'collapsed' : '')}>
                     {childrenTree}
                 </div>
+                <AddInputStringDialog parentId={categoryData.id} isOpened={this.state.addEditDialog} visibilityTrigger={this.visibilityTrigger} addEvent={serviceActions.addCategoryTitle}/>
             </Link>
         )
     }

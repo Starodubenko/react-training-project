@@ -188,7 +188,6 @@ export class CategoryList extends React.Component {
         newCategory.id = Math.round(Math.random()*10000);
         newCategory.title = value;
         updatedData.entities.category[newCategory.id] = newCategory;
-
         if (parentId){
             updatedData.entities.category[parentId].categories.push(newCategory.id);
         } else {
@@ -277,6 +276,7 @@ export class CategoryList extends React.Component {
             editCategory: this.editCategory,
             removeCategory: this.removeCategory,
             createCategoryTree: this.createCategoryTree,
+            addCategoryTitle: this.addCategoryTitle,
         };
 
         let todoActions = {
