@@ -210,8 +210,7 @@ export class CategoryList extends React.Component {
         this.setState({data: updatedData});
     }
 
-    editTodoItem(e) {
-        e.stopPropagation();
+    editTodoItem(todoId, text) {
         console.log("The item is being edited");
     }
 
@@ -220,8 +219,10 @@ export class CategoryList extends React.Component {
         e.stopPropagation();
     }
 
-    editCategory() {
-        console.log("The category is being edited");
+    editCategory(newTitle, categoryId) {
+        let updatedData = this.state.data;
+        updatedData.entities.category[categoryId].title = newTitle;
+        this.setState({data: updatedData});
     }
 
     removeFromTree(parentId, id){

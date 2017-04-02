@@ -23,24 +23,41 @@ export class AddInputStringDialog extends React.Component {
 
     handleKeyPress(e) {
         if (e.key === 'Enter' && this.state.value) {
-            this.props.addEvent(e.target.value, this.props.parentId);
-            this.props.visibilityTrigger()
+            if (this.props.editEntity){
+                this.props.editEvent(this.state.value, this.props.editEntity.id);
+                this.props.toggleEvents.openEditDialog();
+            } else {
+                this.props.addEvent(this.state.value, this.props.parentId);
+                this.props.toggleEvents.openAddDialog();
+            }
+            this.setState({value: ""});
         }
     }
 
     onClickHandler() {
         if (this.state.value) {
-            this.props.addEvent(this.state.value, this.props.parentId);
-            this.props.visibilityTrigger()
+            if (this.props.editEntity){
+                this.props.editEvent(this.state.value, this.props.editEntity.id);
+                this.props.toggleEvents.openEditDialog();
+            } else {
+                this.props.addEvent(this.state.value, this.props.parentId);
+                this.props.toggleEvents.openAddDialog();
+            }
+            this.setState({value: ""});
         }
     }
 
     onCancelHandler() {
-        this.props.visibilityTrigger()
+        if (this.props.editEntity){
+            this.props.toggleEvents.openEditDialog();
+        } else {
+            this.props.toggleEvents.openAddDialog();
+        }
+        this.setState({value: ""});
     }
 
     render() {
-        let {hint, isOpened} = this.props;
+        let {editEntity, isOpened} = this.props;
         let modalActions = [
             <FlatButton
                 label="Cancel"
@@ -48,23 +65,25 @@ export class AddInputStringDialog extends React.Component {
                 onTouchTap={this.onCancelHandler}
             />,
             <FlatButton
-                label="Add"
+                label={editEntity ? "Edit" : "Add"}
                 primary={true}
                 onTouchTap={this.onClickHandler}
             />,
         ];
+
+        let dialogTitle = editEntity ? "Edit category" : "Add category";
         return (
             <div className="add-input-string-dialog">
                 <Dialog
-                    title={""}
+                    title={dialogTitle}
                     actions={modalActions}
                     modal={true}
                     open={isOpened}
                 >
                     <TextField onChange={ this.handleChange }
                                onKeyPress={ this.handleKeyPress }
-                               hintText={hint}
-                               value={this.state.value || ""}
+                               hintText={"Input category title"}
+                               value={this.state.value || editEntity && editEntity.title || ""}
                     />
                 </Dialog>
             </div>

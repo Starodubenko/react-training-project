@@ -18,10 +18,12 @@ export class Category extends React.Component {
         super();
         this.state = {
             isChildrenCollapsed: true,
-            addEditDialog: false
+            addEditDialog: false,
+            editEntity: null
         };
         this.expandCategory = this.expandCategory.bind(this);
-        this.visibilityTrigger = this.visibilityTrigger.bind(this);
+        this.openAddDialog = this.openAddDialog.bind(this);
+        this.openEditDialog = this.openEditDialog.bind(this);
     }
 
     expandCategory(e) {
@@ -35,14 +37,27 @@ export class Category extends React.Component {
         }
     }
 
-    visibilityTrigger(e){
-        // e.stopPropagation();
-        this.setState({addEditDialog: !this.state.addEditDialog})
+    openEditDialog(e){
+        this.setState({
+            addEditDialog: !this.state.addEditDialog,
+            editEntity: this.state.editEntity ? null : this.props.categoryData
+        })
+    }
+
+    openAddDialog(e){
+        this.setState({
+            addEditDialog: !this.state.addEditDialog,
+            editEntity: null
+        })
     }
 
     render() {
         let {serviceActions, categoryData, parentId} = this.props;
         let childrenTree = serviceActions.createCategoryTree(serviceActions, categoryData.categories, categoryData.id);
+        let toggleEvents = {
+            openEditDialog: this.openEditDialog,
+            openAddDialog: this.openAddDialog,
+        };
         return (
             <Link className="category" activeClassName={'active'} to={'category-list/' + categoryData.id}>
                 <Paper className="paper" zDepth={2} children={
@@ -61,7 +76,7 @@ export class Category extends React.Component {
                         <div className="actions">
                             <div className="edit">
                                 <IconButton>
-                                    <EditorModeEdit onClick={serviceActions.editCategory}/>
+                                    <EditorModeEdit onClick={this.openEditDialog}/>
                                 </IconButton>
                             </div>
                             <div className="remove">
@@ -71,7 +86,7 @@ export class Category extends React.Component {
                             </div>
                             <div className="add">
                                 <IconButton>
-                                    <ContentAddBox onClick={this.visibilityTrigger}/>
+                                    <ContentAddBox onClick={this.openAddDialog}/>
                                 </IconButton>
                             </div>
                         </div>
@@ -81,7 +96,14 @@ export class Category extends React.Component {
                     className={(categoryData.categories ? 'children ' : '') + (this.state.isChildrenCollapsed ? 'collapsed' : '')}>
                     {childrenTree}
                 </div>
-                <AddInputStringDialog parentId={categoryData.id} isOpened={this.state.addEditDialog} visibilityTrigger={this.visibilityTrigger} addEvent={serviceActions.addCategoryTitle}/>
+                <AddInputStringDialog
+                    editEntity={this.state.editEntity}
+                    parentId={categoryData.id}
+                    isOpened={this.state.addEditDialog}
+                    toggleEvents={toggleEvents}
+                    addEvent={serviceActions.addCategoryTitle}
+                    editEvent={serviceActions.editCategory}
+                />
             </Link>
         )
     }
