@@ -17,7 +17,8 @@ export class AddInputString extends React.Component {
             },
             rightHorizontalAlign: {
                 textAlign: "end"
-            }
+            },
+            value: ""
         }
     }
 
@@ -47,7 +48,7 @@ export class AddInputString extends React.Component {
                 <TextField onChange={ this.handleChange }
                            onKeyPress={ this.handleKeyPress }
                            hintText={hint}
-                           value={this.state.value}
+                           value={this.state.value || ""}
                 />
                 <FlatButton label="Add" onClick={this.onClickHandler}/>
             </div>
