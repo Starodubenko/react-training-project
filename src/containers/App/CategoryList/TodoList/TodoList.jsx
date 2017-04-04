@@ -35,7 +35,7 @@ export class TodoList extends React.Component {
         let {categoryId} = this.props.routeParams;
         let category = this.state.data.entities.category[categoryId];
         let todoList = category ? category.todoList.map((id)=> {
-            return <TodoItem {...this.props} key={id} data={this.state.data.entities.todo[id]}/>
+            return <TodoItem {...this.props} key={id} data={this.state.data.entities.todo[id]} editItem={self.editItem}/>
         }) : null;
 
         let editChildren = React.Children.map(this.props.children, function (child) {

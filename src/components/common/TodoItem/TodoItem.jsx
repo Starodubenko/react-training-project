@@ -9,6 +9,7 @@ export class TodoItem extends React.Component {
     constructor(){
         super();
         this.goToEdit = this.goToEdit.bind(this);
+        this.markTodoAsDone = this.markTodoAsDone.bind(this);
     }
 
     goToEdit(e){
@@ -16,10 +17,16 @@ export class TodoItem extends React.Component {
         this.props.router.push("category-list/" + this.state.categoryId + "/edit/" + this.state.data.id);
     }
 
+    markTodoAsDone(e){
+        let updatedTodoItem = this.state.data;
+        updatedTodoItem.isDone = e.target.checked;
+        this.props.editItem(updatedTodoItem);
+        this.setState({data: updatedTodoItem});
+    }
+
     componentWillMount(){
         let {categoryId} = this.props.params;
         let {data} = this.props;
-        debugger;
         this.state = {
             categoryId: categoryId,
             data: data,
@@ -31,11 +38,11 @@ export class TodoItem extends React.Component {
             <Paper zDepth={1} children={
                 <div className="todo-item">
                     <div className="title">
-                        <Checkbox label={this.state.data.title}/>
+                        <Checkbox label={this.state.data.title} checked={this.state.data.isDone} onCheck={this.markTodoAsDone}/>
                     </div>
                     <div className="actions">
                         <div className="edit">
-                            <IconButton>
+                            <IconButton disabled={this.state.data.isDone}>
                                 <EditorModeEdit onClick={this.goToEdit}/>
                             </IconButton>
                         </div>

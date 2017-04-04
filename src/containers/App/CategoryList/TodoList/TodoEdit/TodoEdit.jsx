@@ -16,7 +16,7 @@ export class TodoEdit extends React.Component {
         };
 
         this.onCancelHandler = this.onCancelHandler.bind(this);
-        this.navigateToTodoList = this.navigateToTodoList.bind(this);
+        this.navigateBackTodoList = this.navigateBackTodoList.bind(this);
         this.onSaveHandler = this.onSaveHandler.bind(this);
 
         this.onDescriptionChange = this.onDescriptionChange.bind(this);
@@ -28,7 +28,7 @@ export class TodoEdit extends React.Component {
         this.props.router.goBack();
     }
 
-    navigateToTodoList() {
+    navigateBackTodoList() {
         this.props.router.push("category-list/" + this.props.params.categoryId);
     }
 
@@ -52,6 +52,9 @@ export class TodoEdit extends React.Component {
         let {todoId} = this.props.routeParams;
         let {todos} = this.props;
         let todoData = todos[todoId];
+        if (todoData.isDone){
+            this.navigateBackTodoList();
+        }
         this.state = {
             id: todoData.id,
             title: todoData.title,
@@ -65,7 +68,7 @@ export class TodoEdit extends React.Component {
             <Paper className="todo-edit" zDepth={1} children={
                 <div>
                     <div className="actions">
-                        <FlatButton label="Back to todo list" onClick={this.navigateToTodoList}/>
+                        <FlatButton label="Back to todo list" onClick={this.navigateBackTodoList}/>
                         <div>
                             <FlatButton label="Save" onClick={this.onSaveHandler}/>
                             <FlatButton label="Cancel" onClick={this.onCancelHandler}/>
