@@ -19,27 +19,32 @@ export class TodoList extends React.Component {
     }
 
     addItem(text) {
-        let {id} = this.props.routeParams;
+        let {categoryId} = this.props.routeParams;
         let {addTodoItem} =this.props.todoActions;
-        addTodoItem(id, text);
+        addTodoItem(null, categoryId, text);
     }
 
-    editItem() {
+    editItem(updatedTodo) {
+        let {addTodoItem} = this.props.todoActions;
+        addTodoItem(updatedTodo);
         console.log("The item is being edited");
     }
 
     render() {
-        let {id} = this.props.routeParams;
-        let category = this.state.data.entities.category[id];
-        let todoList = category ? category.todoList.map((todoId)=> {
-            return <TodoItem key={todoId} data={this.state.data.entities.todo[todoId]} />
+        let self = this;
+        let {categoryId} = this.props.routeParams;
+        let category = this.state.data.entities.category[categoryId];
+        let todoList = category ? category.todoList.map((id)=> {
+            return <TodoItem {...this.props} key={id} data={this.state.data.entities.todo[id]}/>
         }) : null;
 
-        // let children = React.Children.map(this.props.children, function (child) {
-        //     return React.cloneElement(child, {
-        //         foo: this.state.foo
-        //     })
-        // });
+        let editChildren = React.Children.map(this.props.children, function (child) {
+            return React.cloneElement(child, {
+                todos: self.state.data.entities.todo,
+                previousLocation: self.props.router.getCurrentLocation(),
+                editItem: self.editItem
+            })
+        });
 
         return (
             <div className="todo-list">
@@ -47,7 +52,7 @@ export class TodoList extends React.Component {
                 <div className="item-list">
                     {todoList}
                 </div>
-                {this.props.children}
+                {editChildren}
             </div>
         )
     }

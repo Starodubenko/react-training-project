@@ -2,6 +2,7 @@
 
 .todo-edit{
   @extend .stretch-to-full-container-as-column;
+  padding: 20px;
 
   position: absolute;
   top: 0;
@@ -10,9 +11,28 @@
   left: 0;
   background-color: aquamarine;
   z-index: 2;
-  transform: translateX(90%);
+
+  animation-duration: 500ms;
+  animation-name: slidein;
+
 
   &.open {
+    transform: translateX(100%);
+  }
+
+
+
+  .actions{
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+@keyframes slidein {
+  0%{
+    transform: translateX(100%);
+  }
+  100% {
     transform: translateX(0%);
   }
 }

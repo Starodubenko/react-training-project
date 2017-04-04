@@ -8,20 +8,35 @@ export class TodoItem extends React.Component {
 
     constructor(){
         super();
+        this.goToEdit = this.goToEdit.bind(this);
+    }
+
+    goToEdit(e){
+        e.stopPropagation();
+        this.props.router.push("category-list/" + this.state.categoryId + "/edit/" + this.state.data.id);
+    }
+
+    componentWillMount(){
+        let {categoryId} = this.props.params;
+        let {data} = this.props;
+        debugger;
+        this.state = {
+            categoryId: categoryId,
+            data: data,
+        };
     }
 
     render() {
-        let {data, editEvent} = this.props;
         return (
             <Paper zDepth={1} children={
                 <div className="todo-item">
                     <div className="title">
-                        <Checkbox label={data.title}/>
+                        <Checkbox label={this.state.data.title}/>
                     </div>
                     <div className="actions">
                         <div className="edit">
                             <IconButton>
-                                <EditorModeEdit onClick={editEvent}/>
+                                <EditorModeEdit onClick={this.goToEdit}/>
                             </IconButton>
                         </div>
                     </div>

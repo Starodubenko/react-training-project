@@ -198,15 +198,18 @@ export class CategoryList extends React.Component {
         this.dataService.setData(updatedData);
     }
 
-    addTodoItem(categoryId, text) {
-        let newTodoItem = Object.assign({},this.state.newTodoItem);
-        newTodoItem.id = Math.round(Math.random()*10000);
-        newTodoItem.title = text;
-
+    addTodoItem(updatedTodo, categoryId, text) {
         let updatedData = this.state.data;
-        updatedData.entities.category[categoryId].todoList.push(newTodoItem.id);
-        updatedData.entities.todo[newTodoItem.id] = newTodoItem;
+        if (updatedTodo){
+            updatedData.entities.todo[updatedTodo.id] = updatedTodo;
+        } else {
+            let newTodoItem = Object.assign({},this.state.newTodoItem);
+            newTodoItem.id = Math.round(Math.random()*10000);
+            newTodoItem.title = text;
 
+            updatedData.entities.category[categoryId].todoList.push(newTodoItem.id);
+            updatedData.entities.todo[newTodoItem.id] = newTodoItem;
+        }
         this.setState({data: updatedData});
     }
 
