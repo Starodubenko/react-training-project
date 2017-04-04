@@ -21,6 +21,7 @@ export class CategoryList extends React.Component {
 
         this.removeFromTree = this.removeFromTree.bind(this);
         this.createCategoryTree = this.createCategoryTree.bind(this);
+        this.calculateDonePercentage = this.calculateDonePercentage.bind(this);
 
         // let dataFromRest = [
         //     {
@@ -179,7 +180,7 @@ export class CategoryList extends React.Component {
                 description: "",
                 isDone: false
             }
-        }
+        };
     }
 
     addCategoryTitle(value, parentId) {
@@ -210,7 +211,10 @@ export class CategoryList extends React.Component {
             updatedData.entities.category[categoryId].todoList.push(newTodoItem.id);
             updatedData.entities.todo[newTodoItem.id] = newTodoItem;
         }
-        this.setState({data: updatedData});
+        this.setState({
+            data: updatedData,
+            donePercentage: this.calculateDonePercentage()
+        });
     }
 
     editTodoItem(todoId, text) {
@@ -273,6 +277,23 @@ export class CategoryList extends React.Component {
         });
     }
 
+    calculateDonePercentage(){
+        let todoCount = Object.keys(this.state.data.entities.todo).length;
+        let doneTodoCount = 0;
+        Object.keys(this.state.data.entities.todo).forEach((item) => {
+            if(this.state.data.entities.todo[item].isDone === true){
+                doneTodoCount += 1
+            }
+        });
+        return Math.round(100 * doneTodoCount / todoCount);
+    }
+
+    componentWillMount(){
+        this.setState({donePercentage: this.calculateDonePercentage()});
+
+        debugger;
+    }
+
     render() {
 
         let serviceActions = {
@@ -299,7 +320,7 @@ export class CategoryList extends React.Component {
         return (
             <div className="todo-list">
                 <LinearProgress mode="determinate" color={"#37FF01"} style={{height: '15px', backgroundColor: 'white'}}
-                                value={50}/>
+                                value={this.state.donePercentage}/>
                 <div className="content">
                     <div className="left">
                         <AddInputString hint={"Enter category title"} addEvent={this.addCategoryTitle}/>
