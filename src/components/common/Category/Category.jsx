@@ -39,21 +39,21 @@ export class Category extends React.Component {
         }
     }
 
-    openEditDialog(e){
+    openEditDialog(e) {
         this.setState({
             addEditDialog: !this.state.addEditDialog,
             editEntity: this.state.editEntity ? null : this.props.categoryData
         })
     }
 
-    openAddDialog(e){
+    openAddDialog(e) {
         this.setState({
             addEditDialog: !this.state.addEditDialog,
             editEntity: null
         })
     }
 
-    putInToCategory(e){
+    putInToCategory(e) {
         e.stopPropagation();
         let {serviceActions, categoryData} = this.props;
         let {categoryId, todoId} = this.props.params;
@@ -67,6 +67,8 @@ export class Category extends React.Component {
             openEditDialog: this.openEditDialog,
             openAddDialog: this.openAddDialog,
         };
+
+        debugger;
 
         return (
             <Link className="category" activeClassName={'active'} to={'category-list/' + categoryData.id}>
@@ -83,28 +85,34 @@ export class Category extends React.Component {
                             </div>
                             {categoryData.title}
                         </div>
-                        <div className="actions">
-                            <div className="edit">
-                                <IconButton>
-                                    <EditorModeEdit onClick={this.openEditDialog}/>
-                                </IconButton>
+                        {this.props.params.todoId ?
+                            <div className="actions">
+                                <div className="put-to-this-category">
+                                    <IconButton>
+                                        <ContentReply onClick={this.putInToCategory}/>
+                                    </IconButton>
+                                </div>
+                            </div> :
+                            <div className="actions">
+                                <div className="edit">
+                                    <IconButton>
+                                        <EditorModeEdit onClick={this.openEditDialog}/>
+                                    </IconButton>
+                                </div>
+                                <div className="remove">
+                                    <IconButton>
+                                        <ActionDeleteForever onClick={(e) => {
+                                            serviceActions.removeCategory(parentId, categoryData.id, e)
+                                        }}/>
+                                    </IconButton>
+                                </div>
+                                <div className="add">
+                                    <IconButton>
+                                        <ContentAddBox onClick={this.openAddDialog}/>
+                                    </IconButton>
+                                </div>
                             </div>
-                            <div className="remove">
-                                <IconButton>
-                                    <ActionDeleteForever onClick={(e) => {serviceActions.removeCategory(parentId, categoryData.id, e)}}/>
-                                </IconButton>
-                            </div>
-                            <div className="add">
-                                <IconButton>
-                                    <ContentAddBox onClick={this.openAddDialog}/>
-                                </IconButton>
-                            </div>
-                            <div className="put-to-this-category">
-                                <IconButton>
-                                    <ContentReply onClick={this.putInToCategory}/>
-                                </IconButton>
-                            </div>
-                        </div>
+                        }
                     </div>
                 }/>
                 <div
