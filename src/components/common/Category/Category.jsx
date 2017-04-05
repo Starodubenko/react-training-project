@@ -5,7 +5,8 @@ import {
     ActionDeleteForever,
     ContentAddBox,
     NavigationExpandMore,
-    NavigationChevronRight
+    NavigationChevronRight,
+    ContentReply
 } from "material-ui/svg-icons/index";
 import {hashHistory, Link} from 'react-router';
 
@@ -24,6 +25,7 @@ export class Category extends React.Component {
         this.expandCategory = this.expandCategory.bind(this);
         this.openAddDialog = this.openAddDialog.bind(this);
         this.openEditDialog = this.openEditDialog.bind(this);
+        this.putInToCategory = this.putInToCategory.bind(this);
     }
 
     expandCategory(e) {
@@ -51,6 +53,13 @@ export class Category extends React.Component {
         })
     }
 
+    putInToCategory(e){
+        e.stopPropagation();
+        let {serviceActions, categoryData} = this.props;
+        let {categoryId, todoId} = this.props.params;
+        serviceActions.changeCategory(todoId, categoryId, categoryData.id);
+    }
+
     render() {
         let {serviceActions, categoryData, parentId} = this.props;
         let childrenTree = serviceActions.createCategoryTree(serviceActions, categoryData.categories, categoryData.id);
@@ -58,6 +67,7 @@ export class Category extends React.Component {
             openEditDialog: this.openEditDialog,
             openAddDialog: this.openAddDialog,
         };
+
         return (
             <Link className="category" activeClassName={'active'} to={'category-list/' + categoryData.id}>
                 <Paper className="paper" zDepth={2} children={
@@ -87,6 +97,11 @@ export class Category extends React.Component {
                             <div className="add">
                                 <IconButton>
                                     <ContentAddBox onClick={this.openAddDialog}/>
+                                </IconButton>
+                            </div>
+                            <div className="put-to-this-category">
+                                <IconButton>
+                                    <ContentReply onClick={this.putInToCategory}/>
                                 </IconButton>
                             </div>
                         </div>

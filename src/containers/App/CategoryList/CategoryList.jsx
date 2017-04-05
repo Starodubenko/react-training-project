@@ -269,7 +269,7 @@ export class CategoryList extends React.Component {
     createCategoryTree(serviceActions, categoryIds, parentId) {
         let entities = this.state.data.entities;
         return categoryIds.map((id) => {
-            return <Category key={id}
+            return <Category {...this.props} key={id}
                              serviceActions={serviceActions}
                              categoryData={entities.category[id]}
                              parentId={parentId}
@@ -288,10 +288,20 @@ export class CategoryList extends React.Component {
         return Math.round(100 * doneTodoCount / todoCount);
     }
 
+    changeCategory(){
+        let self = this;
+        return (todoId, from, to) => {
+            let updatedData = self.state.data;
+            let fromList = updatedData.entities.category[from].todoList;
+            let toList = updatedData.entities.category[to].todoList;
+            fromList.splice(fromList.indexOf(+todoId), 1);
+            toList.push(+todoId);
+            self.setState({data: updatedData});
+        }
+    }
+
     componentWillMount(){
         this.setState({donePercentage: this.calculateDonePercentage()});
-
-        debugger;
     }
 
     render() {
@@ -302,6 +312,7 @@ export class CategoryList extends React.Component {
             removeCategory: this.removeCategory,
             createCategoryTree: this.createCategoryTree,
             addCategoryTitle: this.addCategoryTitle,
+            changeCategory: this.changeCategory()
         };
 
         let todoActions = {
