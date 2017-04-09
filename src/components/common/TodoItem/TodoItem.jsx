@@ -33,7 +33,17 @@ export class TodoItem extends React.Component {
         };
     }
 
+    componentWillReceiveProps(){
+        let {categoryId} = this.props.params;
+        let {data} = this.props;
+        this.state = {
+            categoryId: categoryId,
+            data: data,
+        };
+    }
+
     render() {
+        debugger;
         return (
             <Paper zDepth={1} children={
                 <div className="todo-item">
