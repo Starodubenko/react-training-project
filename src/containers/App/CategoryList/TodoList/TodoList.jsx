@@ -8,14 +8,14 @@ export class TodoList extends React.Component {
 
     constructor() {
         super();
-        this.dataService =  DataService.getInstance();
+        // this.dataService =  DataService.getInstance();
         this.addItem = this.addItem.bind(this);
         this.editItem = this.editItem.bind(this);
 
-        const data = this.dataService.getData();
-        this.state = {
-            data: data,
-        }
+        // const data = this.dataService.getData();
+        // this.state = {
+        //     data: data,
+        // }
     }
 
     addItem(text) {
@@ -30,19 +30,24 @@ export class TodoList extends React.Component {
         console.log("The item is being edited");
     }
 
+    componentWillMount(){
+        this.setState({data: this.props.data});
+    }
+
     render() {
-        let self = this;
         let {categoryId} = this.props.routeParams;
         let category = this.state.data.entities.category[categoryId];
         let todoList = category ? category.todoList.map((id)=> {
-            return <TodoItem {...this.props} key={id} data={this.state.data.entities.todo[id]} editItem={self.editItem}/>
+            if (this.props.data.entities.todo[id]){
+                return <TodoItem {...this.props} key={id} data={this.state.data.entities.todo[id]} editItem={this.editItem}/>
+            }
         }) : null;
 
-        let editChildren = React.Children.map(this.props.children, function (child) {
+        let editChildren = React.Children.map(this.props.children, (child) => {
             return React.cloneElement(child, {
-                todos: self.state.data.entities.todo,
-                previousLocation: self.props.router.getCurrentLocation(),
-                editItem: self.editItem
+                todos: this.state.data.entities.todo,
+                previousLocation: this.props.router.getCurrentLocation(),
+                editItem: this.editItem
             })
         });
 

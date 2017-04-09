@@ -63,6 +63,7 @@
     "babel-preset-react": "^6.5.0",
     "babel-preset-stage-2": "^6.22.0",
     "fs": "0.0.1-security",
+    "immutable": "^3.8.1",
     "material-ui": "^0.17.0",
     "normalizr": "^3.2.2",
     "path": "^0.12.7",

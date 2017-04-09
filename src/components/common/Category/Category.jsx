@@ -60,6 +60,10 @@ export class Category extends React.Component {
         serviceActions.changeCategory(todoId, categoryId, categoryData.id);
     }
 
+    isNotEmptyCategoryId(){
+
+    }
+
     render() {
         let {serviceActions, categoryData, parentId} = this.props;
         let childrenTree = serviceActions.createCategoryTree(serviceActions, categoryData.categories, categoryData.id);
@@ -68,7 +72,9 @@ export class Category extends React.Component {
             openAddDialog: this.openAddDialog,
         };
 
-        debugger;
+        let isNotChildrenTreeEmpty = childrenTree.some((item) => {
+            return !!item;
+        });
 
         return (
             <Link className="category" activeClassName={'active'} to={'category-list/' + categoryData.id}>
@@ -76,12 +82,12 @@ export class Category extends React.Component {
                     <div className="main">
                         <div className="title">
                             <div className="expand">
-                                {categoryData.categories.length < 1 ? "" :
+                                {isNotChildrenTreeEmpty ?
                                     <IconButton>
                                         {this.state.isChildrenCollapsed ?
                                             <NavigationChevronRight onClick={this.expandCategory}/> :
                                             <NavigationExpandMore onClick={this.expandCategory}/>}
-                                    </IconButton>}
+                                    </IconButton> : ""}
                             </div>
                             {categoryData.title}
                         </div>

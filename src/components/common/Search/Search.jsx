@@ -16,15 +16,16 @@ export class Search extends React.Component {
     }
 
     clearSearchString() {
-        this.setState({searchRow: ""})
+        this.setState({searchRow: ""});
+        this.props.onFilterChange("");
     }
 
     onChangeHandler(e, newValue) {
-        this.setState({searchRow: newValue})
+        this.setState({searchRow: newValue});
+        this.props.onFilterChange(newValue);
     }
 
     render() {
-        // let {hint, addEvent, isRightHorAlignment} = this.props;
         return (
             <div className="search">
                 <label htmlFor="search-field" className="search-field-label">

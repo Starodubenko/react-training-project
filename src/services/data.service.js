@@ -1,5 +1,5 @@
 import {normalize, schema} from 'normalizr';
-
+const { Map } = require('immutable');
 export default class DataService{
 
     constructor(){
@@ -148,7 +148,6 @@ export default class DataService{
             categories: [categorySchema]
         });
         this.data = normalize(dataFromRest, [categorySchema]);
-
     }
 
     static getInstance(){

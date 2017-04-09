@@ -10,231 +10,57 @@ export class CategoryList extends React.Component {
 
     constructor() {
         super();
-        this.dataService =  DataService.getInstance();
         this.addCategoryTitle = this.addCategoryTitle.bind(this);
         this.addTodoItem = this.addTodoItem.bind(this);
-        this.editTodoItem = this.editTodoItem.bind(this);
 
-        this.newCategory = this.newCategory.bind(this);
         this.editCategory = this.editCategory.bind(this);
         this.removeCategory = this.removeCategory.bind(this);
 
         this.removeFromTree = this.removeFromTree.bind(this);
         this.createCategoryTree = this.createCategoryTree.bind(this);
         this.calculateDonePercentage = this.calculateDonePercentage.bind(this);
-
-        // let dataFromRest = [
-        //     {
-        //         id: 1,
-        //         title: "Category #1",
-        //         todoList: [
-        //             {
-        //                 id: 1,
-        //                 title: "Todo title #1",
-        //                 description: "Todo title #1 Todo title #1 Todo title #1 Todo title #1 ",
-        //                 isDone: false
-        //             },
-        //             {
-        //                 id: 2,
-        //                 title: "Todo title #2",
-        //                 description: "Todo title #1 Todo title #1 Todo title #1 Todo title #1 ",
-        //                 isDone: false
-        //             },
-        //             {
-        //                 id: 3,
-        //                 title: "Todo title #3",
-        //                 description: "Todo title #1 Todo title #1 Todo title #1 Todo title #1 ",
-        //                 isDone: false
-        //             },
-        //         ],
-        //         categories: [
-        //             {
-        //                 id: 2,
-        //                 title: "Category #2",
-        //                 todoList: [
-        //                     {
-        //                         id: 4,
-        //                         title: "Todo title #4",
-        //                         description: "Todo title #1 Todo title #1 Todo title #1 Todo title #1 ",
-        //                         isDone: false
-        //                     }
-        //                 ],
-        //                 categories: []
-        //             },
-        //             {
-        //                 id: 3,
-        //                 title: "Category #3",
-        //                 todoList: [
-        //                     {
-        //                         id: 5,
-        //                         title: "Todo title #5",
-        //                         description: "Todo title #1 Todo title #1 Todo title #1 Todo title #1 ",
-        //                         isDone: false
-        //                     }
-        //                 ],
-        //                 categories: [
-        //                     {
-        //                         id: 4,
-        //                         title: "Category #4",
-        //                         todoList: [
-        //                             {
-        //                                 id: 6,
-        //                                 title: "Todo title #6",
-        //                                 description: "Todo title #1 Todo title #1 Todo title #1 Todo title #1 ",
-        //                                 isDone: false
-        //                             }
-        //                         ],
-        //                         categories: []
-        //                     },
-        //                 ]
-        //             },
-        //         ]
-        //     },
-        //     {
-        //         id: 5,
-        //         title: "Category #5",
-        //         todoList: [
-        //             {
-        //                 id: 7,
-        //                 title: "Todo title #7",
-        //                 description: "Todo title #1 Todo title #1 Todo title #1 Todo title #1 ",
-        //                 isDone: false
-        //             },
-        //             {
-        //                 id: 8,
-        //                 title: "Todo title #8",
-        //                 description: "Todo title #1 Todo title #1 Todo title #1 Todo title #1 ",
-        //                 isDone: false
-        //             },
-        //             {
-        //                 id: 9,
-        //                 title: "Todo title #9",
-        //                 description: "Todo title #1 Todo title #1 Todo title #1 Todo title #1 ",
-        //                 isDone: false
-        //             },
-        //         ],
-        //         categories: [
-        //             {
-        //                 id: 6,
-        //                 title: "Category #6",
-        //                 todoList: [
-        //                     {
-        //                         id: 10,
-        //                         title: "Todo title #10",
-        //                         description: "Todo title #1 Todo title #1 Todo title #1 Todo title #1 ",
-        //                         isDone: false
-        //                     }
-        //                 ],
-        //                 categories: []
-        //             },
-        //             {
-        //                 id: 7,
-        //                 title: "Category #7",
-        //                 todoList: [
-        //                     {
-        //                         id: 11,
-        //                         title: "Todo title #11",
-        //                         description: "Todo title #1 Todo title #1 Todo title #1 Todo title #1 ",
-        //                         isDone: false
-        //                     }
-        //                 ],
-        //                 categories: [
-        //                     {
-        //                         id: 8,
-        //                         title: "Category #8",
-        //                         todoList: [
-        //                             {
-        //                                 id: 12,
-        //                                 title: "Todo title #12",
-        //                                 description: "Todo title #1 Todo title #1 Todo title #1 Todo title #1 ",
-        //                                 isDone: false
-        //                             }
-        //                         ],
-        //                         categories: []
-        //                     },
-        //                 ]
-        //             },
-        //         ]
-        //     }
-        // ];
-        //
-        // const todoSchema = new schema.Entity('todo');
-        // const categorySchema = new schema.Entity('category');
-        // categorySchema.define({
-        //     todoList: [todoSchema],
-        //     categories: [categorySchema]
-        // });
-        // const data = normalize(dataFromRest, [categorySchema]);
-        const data = this.dataService.getData();
-        this.state = {
-            data: data,
-            newCategoryPattern: {
-                id: null,
-                title: "",
-                todoList: [],
-                categories: []
-            },
-            newTodoItem: {
-                id: null,
-                title: "Todo title #1",
-                description: "",
-                isDone: false
-            }
-        };
     }
 
     addCategoryTitle(value, parentId) {
         let updatedData = this.state.data;
-        let newCategory = Object.assign({},this.state.newCategoryPattern);
-        newCategory.id = Math.round(Math.random()*10000);
+        let newCategory = Object.assign({}, this.state.newCategoryPattern);
+        newCategory.id = Math.round(Math.random() * 10000);
         newCategory.title = value;
         updatedData.entities.category[newCategory.id] = newCategory;
-        if (parentId){
+        if (parentId) {
             updatedData.entities.category[parentId].categories.push(newCategory.id);
         } else {
             updatedData.result.push(newCategory.id);
         }
 
-        this.setState({data: updatedData});
-        this.dataService.setData(updatedData);
+        this.state.setGlobalState(updatedData);
     }
 
     addTodoItem(updatedTodo, categoryId, text) {
         let updatedData = this.state.data;
-        if (updatedTodo){
+        if (updatedTodo) {
             updatedData.entities.todo[updatedTodo.id] = updatedTodo;
         } else {
-            let newTodoItem = Object.assign({},this.state.newTodoItem);
-            newTodoItem.id = Math.round(Math.random()*10000);
+            let newTodoItem = Object.assign({}, this.state.newTodoItem);
+            newTodoItem.id = Math.round(Math.random() * 10000);
             newTodoItem.title = text;
 
             updatedData.entities.category[categoryId].todoList.push(newTodoItem.id);
             updatedData.entities.todo[newTodoItem.id] = newTodoItem;
         }
-        this.setState({
-            data: updatedData,
-            donePercentage: this.calculateDonePercentage()
-        });
-    }
 
-    editTodoItem(todoId, text) {
-        console.log("The item is being edited");
-    }
-
-
-    newCategory(e) {
-        e.stopPropagation();
+        this.state.setGlobalState(updatedData);
     }
 
     editCategory(newTitle, categoryId) {
         let updatedData = this.state.data;
         updatedData.entities.category[categoryId].title = newTitle;
-        this.setState({data: updatedData});
+        this.state.setGlobalState(updatedData);
     }
 
-    removeFromTree(parentId, id){
+    removeFromTree(parentId, id) {
         let updatedData = this.state.data;
-        if (parentId){
+        if (parentId) {
             let todoList = updatedData.entities.category[id].todoList;
             let children = updatedData.entities.category[parentId].categories;
             todoList.forEach((todoId) => {
@@ -261,47 +87,65 @@ export class CategoryList extends React.Component {
 
     removeCategory(parentId, id, e) {
         e.stopPropagation();
-        let result = this.removeFromTree(parentId, id);
-        this.setState({data: result});
-        this.dataService.setData(result);
+        let updatedData = this.removeFromTree(parentId, id);
+        this.state.setGlobalState(updatedData);
     }
 
     createCategoryTree(serviceActions, categoryIds, parentId) {
-        let entities = this.state.data.entities;
+        let entities = this.props.data.entities;
         return categoryIds.map((id) => {
-            return <Category {...this.props} key={id}
-                             serviceActions={serviceActions}
-                             categoryData={entities.category[id]}
-                             parentId={parentId}
-            />
+            if (entities.category[id]){
+                return <Category {...this.props} key={id}
+                                 serviceActions={serviceActions}
+                                 categoryData={entities.category[id]}
+                                 parentId={parentId}
+                />
+            }
         });
     }
 
-    calculateDonePercentage(){
-        let todoCount = Object.keys(this.state.data.entities.todo).length;
+    calculateDonePercentage() {
+        let todoCount = Object.keys(this.props.originalData.entities.todo).length;
         let doneTodoCount = 0;
-        Object.keys(this.state.data.entities.todo).forEach((item) => {
-            if(this.state.data.entities.todo[item].isDone === true){
+        Object.keys(this.props.data.entities.todo).forEach((item) => {
+            if (this.props.data.entities.todo[item].isDone === true) {
                 doneTodoCount += 1
             }
         });
         return Math.round(100 * doneTodoCount / todoCount);
     }
 
-    changeCategory(){
-        let self = this;
+    changeCategory() {
         return (todoId, from, to) => {
-            let updatedData = self.state.data;
+            let updatedData = this.state.data;
             let fromList = updatedData.entities.category[from].todoList;
             let toList = updatedData.entities.category[to].todoList;
             fromList.splice(fromList.indexOf(+todoId), 1);
             toList.push(+todoId);
-            self.setState({data: updatedData});
+            this.state.setGlobalState(updatedData);
         }
     }
 
-    componentWillMount(){
-        this.setState({donePercentage: this.calculateDonePercentage()});
+    componentWillMount() {
+        this.setState(
+            {
+                data: this.props.data,
+                setGlobalState: this.props.setGlobalState,
+                donePercentage: this.calculateDonePercentage(),
+                newCategoryPattern: {
+                    id: null,
+                    title: "",
+                    todoList: [],
+                    categories: []
+                },
+                newTodoItem: {
+                    id: null,
+                    title: "Todo title #1",
+                    description: "",
+                    isDone: false
+                }
+            }
+        );
     }
 
     render() {
@@ -320,10 +164,11 @@ export class CategoryList extends React.Component {
             editTodoItem: this.editTodoItem
         };
 
-        let categoryList = this.createCategoryTree(serviceActions, this.state.data.result, null);
+        let categoryList = this.createCategoryTree(serviceActions, this.props.data.result, null);
 
-        let children = React.Children.map(this.props.children, function (child) {
+        let children = React.Children.map(this.props.children, (child) => {
             return React.cloneElement(child, {
+                data: this.props.data,
                 todoActions: todoActions
             })
         });
