@@ -43,7 +43,6 @@ export class TodoItem extends React.Component {
     }
 
     render() {
-        debugger;
         return (
             <Paper zDepth={1} children={
                 <div className="todo-item">
