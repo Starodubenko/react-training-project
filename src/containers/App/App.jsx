@@ -9,9 +9,9 @@ import DataService from "../../services/data.service";
 
 export class App extends React.Component {
 
-    constructor(){
+    constructor() {
         super();
-        this.dataService =  DataService.getInstance();
+        this.dataService = DataService.getInstance();
 
         this.getGlobalState = this.getGlobalState.bind(this);
         this.setGlobalState = this.setGlobalState.bind(this);
@@ -25,42 +25,50 @@ export class App extends React.Component {
     }
 
     static childContextTypes = {
-            muiTheme: React.PropTypes.object
-        };
+        muiTheme: React.PropTypes.object
+    };
 
-    getChildContext(){
+    getChildContext() {
         return {
             muiTheme: getMuiTheme()
         }
     }
 
-    componentWillMount(){
+    componentWillMount() {
         this.setState({
             data: this.dataService.getData(),
-            filterString: ""
+            filterString: "",
+            isShownDoneItems: false
         });
     }
 
-    getGlobalState(){
+    getGlobalState() {
         return this.state.data;
     }
 
-    setGlobalState(updatedData){
+    setGlobalState(updatedData) {
+        this.dataService.setData(updatedData);
         this.setState({data: updatedData})
     }
 
-    onFilterChange(value){
-        this.setState({filterString: value});
+    onFilterChange() {
+        this.forceUpdate();
     }
 
-    filterData(){
-        let filterString = this.state.filterString;
+    filterData() {
+        let {filterString, isShownDoneItems} = this.props.location.query;
+        isShownDoneItems = isShownDoneItems == "true";
         let filteredData = Object.assign({}, this.dataService.getData());
-        let filteredTodoMap = this.arrayToMap(this.mapToArray(this.state.data.entities.todo).filter(todo => filterString === "" || todo.title.includes(filterString)));
-        let filteredCategoryMap = this.arrayToMap(this.mapToArray(this.state.data.entities.category).filter(currentCategory => {
-            let result = this.detectTodoInCategory(this.state.data.entities.category, currentCategory, filteredTodoMap);
-            return result;
-        }));
+        let filteredTodoMap = this.arrayToMap(
+            this.mapToArray(this.state.data.entities.todo)
+                .filter(todo =>
+                (!filterString || todo.title.includes(filterString)) &&
+                (!todo.isDone || (isShownDoneItems && todo.isDone))));
+        let filteredCategoryMap = this.arrayToMap(
+            this.mapToArray(this.state.data.entities.category)
+                .filter(currentCategory =>
+                !filterString ||
+                this.detectTodoInCategory(this.state.data.entities.category, currentCategory, filteredTodoMap)));
         filteredData.result = [...filteredData.result];
         filteredData.entities = {};
         filteredData.entities.todo = filteredTodoMap;
@@ -68,14 +76,13 @@ export class App extends React.Component {
         return filteredData;
     }
 
-    detectTodoInCategory(categoryList, category, todoArray){
-        if (!category.todoList){
+    detectTodoInCategory(categoryList, category, todoArray) {
+        if (!category.todoList) {
             return false;
-        } else if (this.isElementsInArray(todoArray, category.todoList)){
+        } else if (this.isElementsInArray(todoArray, category.todoList)) {
             return true;
         } else {
             let result = false;
-            category.todoList = [];
             [...category.categories].forEach((categoryId) => {
                 result = this.detectTodoInCategory(categoryList, categoryList[categoryId], todoArray);
                 return result;
@@ -84,16 +91,18 @@ export class App extends React.Component {
         }
     }
 
-    isElementsInArray(elements, array){
+    isElementsInArray(elements, array) {
         return array.some(element => elements[element]);
     }
-    mapToArray(map){
+
+    mapToArray(map) {
         let keys = Object.keys(map);
         let array = [];
         keys.forEach(id => array.push(map[id]));
         return array;
     }
-    arrayToMap(array){
+
+    arrayToMap(array) {
         let map = {};
         array.forEach(item => map[item.id] = item);
         return map;
@@ -113,7 +122,7 @@ export class App extends React.Component {
 
         return (
             <div className="app">
-                <Header onFilterChange={this.onFilterChange}/>
+                <Header {...this.props} onFilterChange={this.onFilterChange}/>
                 <Content>
                     {child}
                 </Content>

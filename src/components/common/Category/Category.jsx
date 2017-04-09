@@ -20,12 +20,14 @@ export class Category extends React.Component {
         this.state = {
             isChildrenCollapsed: true,
             addEditDialog: false,
-            editEntity: null
+            editEntity: null,
+            isActivate: false,
         };
         this.expandCategory = this.expandCategory.bind(this);
         this.openAddDialog = this.openAddDialog.bind(this);
         this.openEditDialog = this.openEditDialog.bind(this);
         this.putInToCategory = this.putInToCategory.bind(this);
+        this.activateCategory = this.activateCategory.bind(this);
     }
 
     expandCategory(e) {
@@ -60,12 +62,25 @@ export class Category extends React.Component {
         serviceActions.changeCategory(todoId, categoryId, categoryData.id);
     }
 
-    isNotEmptyCategoryId(){
+    activateCategory(e){
+        e.stopPropagation();
+        this.setState({isActivate: true});
+        let location = this.props.location;
+        location.pathname = "category-list/" + this.props.categoryData.id;
+        this.props.router.push(location)
+    }
 
+    componentWillMount(){
+        this.setState({isActivate: this.props.categoryData.id == this.props.params.categoryId});
+    }
+
+    componentWillReceiveProps(){
+        this.setState({isActivate: this.props.categoryData.id == this.props.params.categoryId});
     }
 
     render() {
         let {serviceActions, categoryData, parentId} = this.props;
+
         let childrenTree = serviceActions.createCategoryTree(serviceActions, categoryData.categories, categoryData.id);
         let toggleEvents = {
             openEditDialog: this.openEditDialog,
@@ -77,7 +92,7 @@ export class Category extends React.Component {
         });
 
         return (
-            <Link className="category" activeClassName={'active'} to={'category-list/' + categoryData.id}>
+            <span className={"category " + (this.state.isActivate ? 'active' : "")} onClick={this.activateCategory}>
                 <Paper className="paper" zDepth={2} children={
                     <div className="main">
                         <div className="title">
@@ -133,7 +148,7 @@ export class Category extends React.Component {
                     addEvent={serviceActions.addCategoryTitle}
                     editEvent={serviceActions.editCategory}
                 />
-            </Link>
+            </span>
         )
     }
 }

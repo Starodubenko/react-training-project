@@ -22,13 +22,12 @@ export class Header extends React.Component {
     }
     render() {
         let {onFilterChange} = this.props;
-
         return (
             <div>
                 <AppBar
                     title="To-Do List"
                     iconElementLeft={<IconButton onClick={this.handleIconClick.bind(this)}></IconButton>}
-                    iconElementRight={<Search onFilterChange={onFilterChange}/>}
+                    iconElementRight={<Search {...this.props} onFilterChange={onFilterChange}/>}
                 />
             </div>
         );
