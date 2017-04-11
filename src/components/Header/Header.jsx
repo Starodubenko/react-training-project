@@ -8,11 +8,6 @@ import IconButton from 'material-ui/IconButton';
 import {routerActions} from "react-router-redux";
 import {Search} from "../common/Search/Search";
 
-@connect((store) => {
-    return {
-        user: store.auth.user
-    }
-})
 export class Header extends React.Component {
 
     handleIconClick(){

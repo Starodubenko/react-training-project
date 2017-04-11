@@ -15,13 +15,13 @@ import {AddInputStringDialog} from "../AddInputStringDialog/AddInputStringDialog
 
 export class Category extends React.Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             isChildrenCollapsed: true,
             addEditDialog: false,
             editEntity: null,
-            isActivate: false,
+            isActivate: this.props.categoryData.id == this.props.params.categoryId
         };
         this.expandCategory = this.expandCategory.bind(this);
         this.openAddDialog = this.openAddDialog.bind(this);
@@ -68,10 +68,6 @@ export class Category extends React.Component {
         let location = this.props.location;
         location.pathname = "category-list/" + this.props.categoryData.id;
         this.props.router.push(location)
-    }
-
-    componentWillMount(){
-        this.setState({isActivate: this.props.categoryData.id == this.props.params.categoryId});
     }
 
     componentWillReceiveProps(){

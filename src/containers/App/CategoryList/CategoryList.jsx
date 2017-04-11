@@ -8,8 +8,31 @@ import DataService from "../../../services/data.service";
 
 export class CategoryList extends React.Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            data: this.props.data,
+            setGlobalState: this.props.setGlobalState,
+            donePercentage: this.calculateDonePercentage(),
+            getNewCategoryPattern: () => {
+                return {
+                    id: null,
+                    title: "New category",
+                    todoList: [],
+                    categories: []
+                }
+            },
+            getNewTodoItem: () => {
+                return {
+                    id: null,
+                    title: "New todo item",
+                    description: "",
+                    isDone: false
+                }
+            }
+        };
+
         this.addCategoryTitle = this.addCategoryTitle.bind(this);
         this.addTodoItem = this.addTodoItem.bind(this);
 
@@ -23,7 +46,7 @@ export class CategoryList extends React.Component {
 
     addCategoryTitle(value, parentId) {
         let updatedData = this.state.data;
-        let newCategory = Object.assign({}, this.state.newCategoryPattern);
+        let newCategory = Object.assign({}, this.state.getNewCategoryPattern());
         newCategory.id = Math.round(Math.random() * 10000);
         newCategory.title = value;
         updatedData.entities.category[newCategory.id] = newCategory;
@@ -41,7 +64,7 @@ export class CategoryList extends React.Component {
         if (updatedTodo) {
             updatedData.entities.todo[updatedTodo.id] = updatedTodo;
         } else {
-            let newTodoItem = Object.assign({}, this.state.newTodoItem);
+            let newTodoItem = Object.assign({}, this.state.getNewTodoItem());
             newTodoItem.id = Math.round(Math.random() * 10000);
             newTodoItem.title = text;
 
@@ -105,10 +128,11 @@ export class CategoryList extends React.Component {
     }
 
     calculateDonePercentage() {
-        let todoCount = Object.keys(this.props.originalData.entities.todo).length;
+        let {todo} = this.props.originalData.entities;
+        let todoCount = Object.keys(todo).length;
         let doneTodoCount = 0;
-        Object.keys(this.props.data.entities.todo).forEach((item) => {
-            if (this.props.data.entities.todo[item].isDone === true) {
+        Object.keys(todo).forEach((item) => {
+            if (todo[item].isDone === true) {
                 doneTodoCount += 1
             }
         });
@@ -126,26 +150,10 @@ export class CategoryList extends React.Component {
         }
     }
 
-    componentWillMount() {
-        this.setState(
-            {
-                data: this.props.data,
-                setGlobalState: this.props.setGlobalState,
-                donePercentage: this.calculateDonePercentage(),
-                newCategoryPattern: {
-                    id: null,
-                    title: "",
-                    todoList: [],
-                    categories: []
-                },
-                newTodoItem: {
-                    id: null,
-                    title: "Todo title #1",
-                    description: "",
-                    isDone: false
-                }
-            }
-        );
+    componentWillReceiveProps(){
+        this.setState({
+            donePercentage: this.calculateDonePercentage()
+        })
     }
 
     render() {
