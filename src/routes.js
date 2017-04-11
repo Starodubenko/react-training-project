@@ -9,12 +9,10 @@ export default class Routes extends Component{
         const {store} = this.props;
         const history = syncHistoryWithStore(hashHistory, store);
         return (
-            <Router history={hashHistory}>
+            <Router history={history}>
                 <Route path="/" component={App}>
-                    {/*//TodoList*/}
                     <Route path="category-list" component={CategoryList}>
                         <Route {...this.props} path=":categoryId" component={TodoList}>
-                            {/*<Route path=":id" component={TodoView}/>*/}
                             <Route {...this.props} path="edit/:todoId" component={TodoEdit}/>
                         </Route>
                     </Route>
