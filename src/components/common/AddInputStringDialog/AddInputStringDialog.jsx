@@ -1,8 +1,15 @@
 import * as React from "react";
 import {Dialog, FlatButton, RaisedButton, TextField} from "material-ui";
+import {connect} from "react-redux";
 
 import "./AddInputStringDiaolg.scss"
 
+
+@connect((store) => {
+    return {
+        user: store.auth.user
+    }
+})
 export class AddInputStringDialog extends React.Component {
 
     constructor() {

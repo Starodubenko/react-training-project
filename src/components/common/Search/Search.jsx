@@ -1,9 +1,15 @@
 import * as React from "react";
 import {Checkbox, IconButton, TextField} from "material-ui";
-import {EditorModeEdit, ActionSearch, ContentClear} from "material-ui/svg-icons/index";
+import {ActionSearch, ContentClear} from "material-ui/svg-icons/index";
+import {connect} from "react-redux";
 
 import "./Search.scss"
 
+@connect((store) => {
+    return {
+        user: store.auth.user
+    }
+})
 export class Search extends React.Component {
 
     constructor() {

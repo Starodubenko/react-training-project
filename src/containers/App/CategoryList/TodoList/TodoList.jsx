@@ -1,21 +1,20 @@
 import * as React from "react";
 import {AddInputString, TodoItem} from "../../../../components";
+import {connect} from "react-redux";
 
-import "./TodoList.scss"
-import DataService from "../../../../services/data.service";
+import "./TodoList.scss";
 
+@connect((store) => {
+    return {
+
+    }
+})
 export class TodoList extends React.Component {
 
     constructor() {
         super();
-        // this.dataService =  DataService.getInstance();
         this.addItem = this.addItem.bind(this);
         this.editItem = this.editItem.bind(this);
-
-        // const data = this.dataService.getData();
-        // this.state = {
-        //     data: data,
-        // }
     }
 
     addItem(text) {

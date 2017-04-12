@@ -2,11 +2,18 @@ import * as React from "react";
 import {Header, Content, Footer} from "../../components";
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import injectTapEventPlugin from 'react-tap-event-plugin';
-injectTapEventPlugin();
-
-import "./App.scss"
 import DataService from "../../services/data.service";
+import {connect} from "react-redux";
 
+injectTapEventPlugin();
+import "./App.scss"
+
+
+@connect((store) => {
+    return {
+
+    }
+})
 export class App extends React.Component {
 
     constructor() {

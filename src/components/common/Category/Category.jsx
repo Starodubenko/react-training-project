@@ -8,11 +8,16 @@ import {
     NavigationChevronRight,
     ContentReply
 } from "material-ui/svg-icons/index";
-import {hashHistory, Link} from 'react-router';
+import {AddInputStringDialog} from "../AddInputStringDialog/AddInputStringDialog";
+import {connect} from "react-redux";
 
 import "./Category.scss"
-import {AddInputStringDialog} from "../AddInputStringDialog/AddInputStringDialog";
 
+@connect((store) => {
+    return {
+        user: store.auth.user
+    }
+})
 export class Category extends React.Component {
 
     constructor() {

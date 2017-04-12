@@ -1,9 +1,15 @@
 import * as React from "react";
 import {Checkbox, IconButton, Paper} from "material-ui";
 import {EditorModeEdit} from "material-ui/svg-icons/index";
+import {connect} from "react-redux";
 
 import "./TodoItem.scss"
 
+@connect((store) => {
+    return {
+        user: store.auth.user
+    }
+})
 export class TodoItem extends React.Component {
 
     constructor(){

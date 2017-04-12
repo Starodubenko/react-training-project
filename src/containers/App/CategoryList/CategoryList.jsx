@@ -1,11 +1,15 @@
 import * as React from "react";
-import {normalize, schema} from 'normalizr';
 import {AddInputString, Category} from "../../../components";
-
-import "./CategoryList.scss"
 import {LinearProgress} from "material-ui";
-import DataService from "../../../services/data.service";
+import {connect} from "react-redux";
 
+import "./CategoryList.scss";
+
+@connect((store) => {
+    return {
+
+    }
+})
 export class CategoryList extends React.Component {
 
     constructor() {

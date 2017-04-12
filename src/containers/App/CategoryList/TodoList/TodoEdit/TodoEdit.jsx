@@ -1,9 +1,14 @@
 import * as React from "react";
 import {Checkbox, FlatButton, LinearProgress, Paper, TextField} from "material-ui";
 import {connect} from "react-redux";
+
 import "./TodoEdit.scss"
 
+@connect((store) => {
+    return {
 
+    }
+})
 export class TodoEdit extends React.Component {
 
     constructor() {
