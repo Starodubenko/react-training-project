@@ -1,28 +1,40 @@
-import {START_LOG_IN, END_LOG_IN, LOG_IN_REJECTED, LOG_OUT} from "../../reducers/AuthReducer/AuthReducer";
+import {ADD_TODO, FREE_TODO_EDIT, SET_TODO_TO_EDIT, START_TODO_PROCESSING, TOGGLE_TODO_DONE_STATUS} from "../../reducers/TodoReducer/TodoReducer";
 import Request from "superagent"
 
 
-export function startLogInAction(){
+export function startTodoProcessingAction(){
+    return {
+        type: START_TODO_PROCESSING,
+        payload: null
+    }
+}
+
+export function addTodoAction(){
   return {
-      type: START_LOG_IN,
+      type: ADD_TODO,
       payload: null
     }
 }
 
-export function logInIsSuccessAction(data){
+export function setTodoToEditAction(){
+    return {
+        type: SET_TODO_TO_EDIT,
+        payload: null
+    }
+}
+
+export function FreeTodoEditAction(data){
   return {
-      type: END_LOG_IN,
+      type: FREE_TODO_EDIT,
       payload: {
         user: {id: 1, fullName: data.username + " Doe"},
       }
     }
 }
 
-export function logOutAction(){
-  return {
-      type: LOG_OUT,
-      payload: null
+export function toggleTodoDoneStatusAction(){
+    return {
+        type: TOGGLE_TODO_DONE_STATUS,
+        payload: null
     }
 }
-
-// export function loginAction

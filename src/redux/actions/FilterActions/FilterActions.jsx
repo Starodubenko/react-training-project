@@ -1,26 +1,26 @@
-import {START_LOG_IN, END_LOG_IN, LOG_IN_REJECTED, LOG_OUT} from "../../reducers/AuthReducer/AuthReducer";
+import {CLEAN_FILTER_STRING, SET_DONE_CHECK_BOX, SET_FILTER_STRING} from "../../reducers/FilterReducer/FilterReducer";
 import Request from "superagent"
 
 
-export function startLogInAction(){
+export function setFilterStringAction(){
   return {
-      type: START_LOG_IN,
+      type: SET_FILTER_STRING,
       payload: null
     }
 }
 
-export function logInIsSuccessAction(data){
+export function cleanFilterStringAction(data){
   return {
-      type: END_LOG_IN,
+      type: CLEAN_FILTER_STRING,
       payload: {
         user: {id: 1, fullName: data.username + " Doe"},
       }
     }
 }
 
-export function logOutAction(){
+export function setDoneCheckBoxAction(){
   return {
-      type: LOG_OUT,
+      type: SET_DONE_CHECK_BOX,
       payload: null
     }
 }

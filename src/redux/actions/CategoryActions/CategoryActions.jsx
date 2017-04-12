@@ -1,28 +1,27 @@
-import {START_LOG_IN, END_LOG_IN, LOG_IN_REJECTED, LOG_OUT} from "../../reducers/AuthReducer/AuthReducer";
+import {START_CATEGORY_PROCESSING, ADD_CATEGORY, REMOVE_CATEGORY} from "../../reducers/CategoryReducer/CategoryReducer";
+
 import Request from "superagent"
 
 
-export function startLogInAction(){
+export function startCategoryProcessAction(){
   return {
-      type: START_LOG_IN,
+      type: START_CATEGORY_PROCESSING,
       payload: null
     }
 }
 
-export function logInIsSuccessAction(data){
+export function addCategoryAction(data){
   return {
-      type: END_LOG_IN,
+      type: ADD_CATEGORY,
       payload: {
         user: {id: 1, fullName: data.username + " Doe"},
       }
     }
 }
 
-export function logOutAction(){
+export function RemoveAction(){
   return {
-      type: LOG_OUT,
+      type: REMOVE_CATEGORY,
       payload: null
     }
 }
-
-// export function loginAction

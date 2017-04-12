@@ -1,4 +1,8 @@
-export const START_LOG_IN = "START_LOG_IN_SYSTEM";
+export const START_CATEGORY_PROCESSING = "START_CATEGORY_PROCESSING";
+export const ADD_CATEGORY = "ADD_CATEGORY";
+export const REMOVE_CATEGORY = "REMOVE_CATEGORY";
+export const SET_CATEGORY_TO_EDIT = "SET_CATEGORY_TO_EDIT";
+export const FREE_CATEGORY_EDIT = "FREE_CATEGORY_EDIT";
 
 
 const CategoryReducer = (state = {
@@ -8,13 +12,13 @@ const CategoryReducer = (state = {
     error: null
 }, action) => {
     switch (action.type) {
-        case START_LOG_IN: {
+        case START_CATEGORY_PROCESSING: {
             return {
                 ...state,
                 logining: true
             }
         }
-        case END_LOG_IN: {
+        case ADD_CATEGORY: {
             return {
                 ...state,
                 logining: false,
@@ -22,20 +26,25 @@ const CategoryReducer = (state = {
                 user: action.payload.user
             }
         }
-        case LOG_IN_REJECTED: {
+        case REMOVE_CATEGORY: {
             return {
                 ...state,
                 logining: false,
                 error: action.payload
             }
         }
-        case LOG_OUT: {
+        case SET_CATEGORY_TO_EDIT: {
             return {
                 ...state,
-                user: null,
                 logining: false,
-                loggedIn: false,
-                error: null
+                error: action.payload
+            }
+        }
+        case FREE_CATEGORY_EDIT: {
+            return {
+                ...state,
+                logining: false,
+                error: action.payload
             }
         }
         default:

@@ -1,4 +1,6 @@
-export const START_LOG_IN = "START_LOG_IN_SYSTEM";
+export const SET_FILTER_STRING = "SET_FILTER_STRING";
+export const CLEAN_FILTER_STRING = "CLEAN_FILTER_STRING";
+export const SET_DONE_CHECK_BOX = "SET_DONE_CHECK_BOX";
 
 
 const FilterReducer = (state = {
@@ -8,13 +10,13 @@ const FilterReducer = (state = {
     error: null
 }, action) => {
     switch (action.type) {
-        case START_LOG_IN: {
+        case SET_FILTER_STRING: {
             return {
                 ...state,
                 logining: true
             }
         }
-        case END_LOG_IN: {
+        case CLEAN_FILTER_STRING: {
             return {
                 ...state,
                 logining: false,
@@ -22,20 +24,11 @@ const FilterReducer = (state = {
                 user: action.payload.user
             }
         }
-        case LOG_IN_REJECTED: {
+        case SET_DONE_CHECK_BOX: {
             return {
                 ...state,
                 logining: false,
                 error: action.payload
-            }
-        }
-        case LOG_OUT: {
-            return {
-                ...state,
-                user: null,
-                logining: false,
-                loggedIn: false,
-                error: null
             }
         }
         default:

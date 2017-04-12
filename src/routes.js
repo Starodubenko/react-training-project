@@ -12,8 +12,8 @@ export default class Routes extends Component{
             <Router history={history}>
                 <Route path="/" component={App}>
                     <Route path="category-list" component={CategoryList}>
-                        <Route {...this.props} path=":categoryId" component={TodoList}>
-                            <Route {...this.props} path="edit/:todoId" component={TodoEdit}/>
+                        <Route path=":categoryId" component={TodoList}>
+                            <Route path="edit/:todoId" component={TodoEdit}/>
                         </Route>
                     </Route>
                     <IndexRedirect to="/category-list" />
