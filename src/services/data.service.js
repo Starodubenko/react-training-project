@@ -160,10 +160,43 @@ export default class DataService{
     }
 
     getData(){
-        return this.data;
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+
+                resolve(this.data);
+            }, 1000);
+        });
     }
 
-    setData(newData){
-        this.data = newData;
+    setData(updatedData){
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(true);
+            }, 1000);
+        });
+    }
+
+    addCategory(parent, category){
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve({id:Math.round(Math.random() * 10000)});
+            }, 1000);
+        });
+    }
+
+    removeCategory(category){
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(true);
+            }, 1000);
+        });
+    }
+
+    updateCategory(category){
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(true);
+            }, 1000);
+        });
     }
 };

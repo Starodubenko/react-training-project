@@ -3,17 +3,26 @@ import {AddInputString, Category} from "../../../components";
 import {LinearProgress} from "material-ui";
 import {connect} from "react-redux";
 
+import {getFilteredCategoryMap} from "../../../redux/selectors/CategorySelector/CategorySelector";
+import {getResult} from "../../../redux/selectors/ResultSelector/ResultSelector";
 import "./CategoryList.scss";
+import {AddInputStringDialog} from "../../../components/common/AddInputStringDialog/AddInputStringDialog";
+import {saveCategoryAction} from "../../../redux/actions/CategoryActions/CategoryActions";
 
-@connect((store) => {
+@connect((store, props) => {
     return {
-
+        filteredCategoryMap: getFilteredCategoryMap(store),
+        processingCategory: store.category.get("processingCategory"),
+        processingCategoryParentId: store.category.get("processingCategoryParentId"),
+        categoryBlank: store.category.get("categoryBlank"),
+        result: getResult(store)
     }
 })
 export class CategoryList extends React.Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+
         this.addCategoryTitle = this.addCategoryTitle.bind(this);
         this.addTodoItem = this.addTodoItem.bind(this);
 
@@ -21,23 +30,12 @@ export class CategoryList extends React.Component {
         this.removeCategory = this.removeCategory.bind(this);
 
         this.removeFromTree = this.removeFromTree.bind(this);
-        this.createCategoryTree = this.createCategoryTree.bind(this);
+        this.createCategoryArray = this.createCategoryArray.bind(this);
         this.calculateDonePercentage = this.calculateDonePercentage.bind(this);
     }
 
-    addCategoryTitle(value, parentId) {
-        let updatedData = this.state.data;
-        let newCategory = Object.assign({}, this.state.newCategoryPattern);
-        newCategory.id = Math.round(Math.random() * 10000);
-        newCategory.title = value;
-        updatedData.entities.category[newCategory.id] = newCategory;
-        if (parentId) {
-            updatedData.entities.category[parentId].categories.push(newCategory.id);
-        } else {
-            updatedData.result.push(newCategory.id);
-        }
-
-        this.state.setGlobalState(updatedData);
+    addCategoryTitle(title) {
+        this.props.dispatch(saveCategoryAction(null, this.props.categoryBlank.set("title", title)));
     }
 
     addTodoItem(updatedTodo, categoryId, text) {
@@ -95,17 +93,15 @@ export class CategoryList extends React.Component {
         this.state.setGlobalState(updatedData);
     }
 
-    createCategoryTree(serviceActions, categoryIds, parentId) {
-        let entities = this.props.data.entities;
-        return categoryIds.map((id) => {
-            if (entities.category[id]){
-                return <Category {...this.props} key={id}
-                                 serviceActions={serviceActions}
-                                 categoryData={entities.category[id]}
-                                 parentId={parentId}
-                />
+    createCategoryArray(categoryIds) {
+        let self = this;
+        return categoryIds.reduce((collector, id) => {
+            let category = self.props.filteredCategoryMap.get(id) || self.props.filteredCategoryMap.get("" + id);
+            if (category) {
+                collector.push(<Category {...self.props} key={id} category={category} createCategoryArray={self.createCategoryArray}/>)
             }
-        });
+            return collector;
+        }, []);
     }
 
     calculateDonePercentage() {
@@ -130,57 +126,13 @@ export class CategoryList extends React.Component {
         }
     }
 
-    componentWillMount() {
-        this.setState(
-            {
-                data: this.props.data,
-                setGlobalState: this.props.setGlobalState,
-                donePercentage: this.calculateDonePercentage(),
-                newCategoryPattern: {
-                    id: null,
-                    title: "",
-                    todoList: [],
-                    categories: []
-                },
-                newTodoItem: {
-                    id: null,
-                    title: "Todo title #1",
-                    description: "",
-                    isDone: false
-                }
-            }
-        );
-    }
-
     render() {
-
-        let serviceActions = {
-            newCategory: this.newCategory,
-            editCategory: this.editCategory,
-            removeCategory: this.removeCategory,
-            createCategoryTree: this.createCategoryTree,
-            addCategoryTitle: this.addCategoryTitle,
-            changeCategory: this.changeCategory()
-        };
-
-        let todoActions = {
-            addTodoItem: this.addTodoItem,
-            editTodoItem: this.editTodoItem
-        };
-
-        let categoryList = this.createCategoryTree(serviceActions, this.props.data.result, null);
-
-        let children = React.Children.map(this.props.children, (child) => {
-            return React.cloneElement(child, {
-                data: this.props.data,
-                todoActions: todoActions
-            })
-        });
+        let categoryList = this.createCategoryArray(this.props.result);
 
         return (
             <div className="todo-list">
                 <LinearProgress mode="determinate" color={"#37FF01"} style={{height: '15px', backgroundColor: 'white'}}
-                                value={this.state.donePercentage}/>
+                                value={50}/>
                 <div className="content">
                     <div className="left">
                         <AddInputString hint={"Enter category title"} addEvent={this.addCategoryTitle}/>
@@ -189,9 +141,10 @@ export class CategoryList extends React.Component {
                         </div>
                     </div>
                     <div className="right">
-                        {children}
+                        {/*{this.props.children}*/}
                     </div>
                 </div>
+                <AddInputStringDialog entity={this.props.processingCategory} parentId={this.props.processingCategoryParentId}/>
             </div>
         )
     }

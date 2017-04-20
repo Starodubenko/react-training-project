@@ -1,35 +1,24 @@
 export const SET_FILTER_STRING = "SET_FILTER_STRING";
-export const CLEAN_FILTER_STRING = "CLEAN_FILTER_STRING";
 export const SET_DONE_CHECK_BOX = "SET_DONE_CHECK_BOX";
 
+import { fromJS } from 'immutable'
 
-const FilterReducer = (state = {
-    user: null,
-    logining: false,
-    loggedIn: false,
-    error: null
-}, action) => {
+const initialState = fromJS({
+    filterString: "",
+    isShownDoneItems: false
+});
+
+const FilterReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_FILTER_STRING: {
-            return {
-                ...state,
-                logining: true
-            }
-        }
-        case CLEAN_FILTER_STRING: {
-            return {
-                ...state,
-                logining: false,
-                loggedIn: true,
-                user: action.payload.user
-            }
+            return state.mergeDeep({
+                filterString: action.payload.filterString
+            })
         }
         case SET_DONE_CHECK_BOX: {
-            return {
-                ...state,
-                logining: false,
-                error: action.payload
-            }
+            return state.mergeDeep({
+                isShownDoneItems: action.payload.isShownDoneItems
+            })
         }
         default:
             return state;

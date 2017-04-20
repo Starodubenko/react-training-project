@@ -1,40 +1,50 @@
-import {ADD_TODO, FREE_TODO_EDIT, SET_TODO_TO_EDIT, START_TODO_PROCESSING, TOGGLE_TODO_DONE_STATUS} from "../../reducers/TodoReducer/TodoReducer";
-import Request from "superagent"
+import {SET_TODO_PROCESSOR, FREE_TODO_PROCESSOR} from "../../reducers/CategoryReducer/CategoryReducer"
 
-
-export function startTodoProcessingAction(){
+export function setTodoToEditAction(id){
     return {
-        type: START_TODO_PROCESSING,
-        payload: null
+        type: SET_TODO_PROCESSOR,
+        payload: {
+            todo: data
+        }
     }
 }
 
-export function addTodoAction(){
+export function freeTodoEditAction(){
   return {
-      type: ADD_TODO,
+      type: FREE_TODO_PROCESSOR,
       payload: null
     }
 }
 
-export function setTodoToEditAction(){
+export function setTodoListAction(data){
     return {
-        type: SET_TODO_TO_EDIT,
-        payload: null
+        type: SET_TODO_LIST,
+        payload: {
+            todoList: data
+        }
     }
 }
 
-export function FreeTodoEditAction(data){
-  return {
-      type: FREE_TODO_EDIT,
-      payload: {
-        user: {id: 1, fullName: data.username + " Doe"},
-      }
-    }
+export function updateTodoAction(updatedTodo){
+    return (dispatch, getState) => {
+        let updatedTodoList = null;
+
+        return dispatch(setTodoListAction(updatedTodoList));
+    };
 }
 
-export function toggleTodoDoneStatusAction(){
-    return {
-        type: TOGGLE_TODO_DONE_STATUS,
-        payload: null
-    }
+export function addTodoAction(todo){
+    return (dispatch, getState) => {
+        let updatedTodoList = null;
+
+        return dispatch(setTodoListAction(updatedTodoList));
+    };
+}
+
+function toggleTodoDoneStatusAction(id) {
+    return (dispatch, getState) => {
+        let updatedTodoList = null;
+
+        return dispatch(setTodoListAction(updatedTodoList));
+    };
 }

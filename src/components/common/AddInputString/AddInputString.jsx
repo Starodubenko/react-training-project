@@ -3,11 +3,12 @@ import {FlatButton, TextField} from "material-ui";
 import {connect} from "react-redux";
 
 import "./AddInputString.scss"
+import {saveCategoryAction} from "../../../redux/actions/CategoryActions/CategoryActions";
 
 
 @connect((store) => {
     return {
-        user: store.auth.user
+
     }
 })
 export class AddInputString extends React.Component {
@@ -34,14 +35,13 @@ export class AddInputString extends React.Component {
     }
 
     handleKeyPress(e) {
-        if (e.key === 'Enter' && this.state.value) {
-            this.props.addEvent(e.target.value);
-            this.setState({value: ""});
+        if (e.key === 'Enter') {
+            this.onClickHandler()
         }
     }
 
-    onClickHandler(){
-        if (this.state.value){
+    onClickHandler() {
+        if (this.state.value) {
             this.props.addEvent(this.state.value);
             this.setState({value: ""});
         }

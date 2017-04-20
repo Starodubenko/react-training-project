@@ -4,67 +4,72 @@ import {ActionSearch, ContentClear} from "material-ui/svg-icons/index";
 import {connect} from "react-redux";
 
 import "./Search.scss"
+import {getFilter} from "../../../redux/selectors/FilterSelector/FilterSelector";
+import {
+    cleanFilterStringAction, setDoneCheckBoxAction,
+    setFilterStringAction
+} from "../../../redux/actions/FilterActions/FilterActions";
 
 @connect((store) => {
     return {
-        user: store.auth.user
+        filter: store.filter
     }
 })
 export class Search extends React.Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.clearSearchString = this.clearSearchString.bind(this);
         this.onChangeHandler = this.onChangeHandler.bind(this);
         this.markToShowDone = this.markToShowDone.bind(this);
 
         this.state = {
-            filterString: "",
-            isShownDoneItems: false
+            filterString: this.props.location && this.props.location.query.filterString || props.filter.get("filterString"),
+            isShownDoneItems: this.props.location && this.props.location.query.isShownDoneItems || props.filter.get("isShownDoneItems")
         }
     }
 
     clearSearchString() {
-        delete this.props.location.query.filterString;
+        // delete this.props.location.query.filterString;
         this.setState({filterString: ""});
         this.props.onFilterChange();
+        this.dispatch(cleanFilterStringAction())
     }
 
     onChangeHandler(e, newValue) {
         this.setState({filterString: newValue});
-        if (newValue){
-            this.props.location.query.filterString = newValue;
-        } else {
-            delete this.props.location.query.filterString;
-        }
-        this.props.router.push(this.props.location);
-        this.props.onFilterChange();
+        // if (newValue){
+        //     this.props.location.query.filterString = newValue;
+        // } else {
+        //     delete this.props.location.query.filterString;
+        // }
+        // this.props.router.push(this.props.location);
+        // this.props.onFilterChange();
+        this.dispatch(setFilterStringAction(newValue))
     }
 
     markToShowDone(e) {
         this.setState({isShownDoneItems: e.target.checked});
-        this.props.location.query.isShownDoneItems = e.target.checked;
-        this.props.router.push(this.props.location);
-        this.props.onFilterChange();
+        // this.props.location.query.isShownDoneItems = e.target.checked;
+        // this.props.router.push(this.props.location);
+        // this.props.onFilterChange();
+        this.dispatch(setDoneCheckBoxAction(e.target.checked))
     }
 
     componentWillMount(){
-        this.setState({
-            filterString: this.props.location.query.filterString || "",
-            isShownDoneItems: this.props.location.query.isShownDoneItems || false
-        })
+
     }
 
     render() {
-        let isShownDoneItems = typeof this.state.isShownDoneItems == "string" ?
-            this.state.isShownDoneItems == "true" :
-            this.state.isShownDoneItems;
+        // let isShownDoneItems = typeof this.state.isShownDoneItems == "string" ?
+        //     this.state.isShownDoneItems == "true" :
+        //     this.state.isShownDoneItems;
 
         return (
             <div className="search">
                 <div className="done-checkbox">
                     <Checkbox  label={"Show done"}
-                               checked={isShownDoneItems}
+                               checked={this.state.isShownDoneItems}
                                onCheck={this.markToShowDone}
                                iconStyle={{fill:  '#ffffff'}}/>
                 </div>

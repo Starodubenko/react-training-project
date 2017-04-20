@@ -11,33 +11,36 @@ import {
 import {AddInputStringDialog} from "../AddInputStringDialog/AddInputStringDialog";
 import {connect} from "react-redux";
 
-import "./Category.scss"
+import "./Category.scss";
+import {push} from "react-router-redux";
+import {removeCategoryAction, setCategoryProcessorAction} from "../../../redux/actions/CategoryActions/CategoryActions";
+const { List } = require('immutable')
 
-@connect((store) => {
+@connect((store, props) => {
     return {
-        user: store.auth.user
+        categoryData: store.category.get("categoryData"),
+        categoryBlank: store.category.get("categoryBlank"),
     }
 })
 export class Category extends React.Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             isChildrenCollapsed: true,
-            addEditDialog: false,
-            editEntity: null,
-            isActivate: false,
+            isActivate: props.category.get("id") === +this.props.params.categoryId
         };
         this.expandCategory = this.expandCategory.bind(this);
         this.openAddDialog = this.openAddDialog.bind(this);
         this.openEditDialog = this.openEditDialog.bind(this);
         this.putInToCategory = this.putInToCategory.bind(this);
         this.activateCategory = this.activateCategory.bind(this);
+        this.removeCategory = this.removeCategory.bind(this);
     }
 
     expandCategory(e) {
         e.stopPropagation();
-        if (this.props.categoryData.categories.length > 0) {
+        if (this.props.category.get("categories").size > 0) {
             this.setState(
                 {
                     isChildrenCollapsed: !this.state.isChildrenCollapsed
@@ -47,54 +50,38 @@ export class Category extends React.Component {
     }
 
     openEditDialog(e) {
-        this.setState({
-            addEditDialog: !this.state.addEditDialog,
-            editEntity: this.state.editEntity ? null : this.props.categoryData
-        })
+        e.stopPropagation();
+        this.props.dispatch(setCategoryProcessorAction(null, this.props.category));
     }
 
     openAddDialog(e) {
-        this.setState({
-            addEditDialog: !this.state.addEditDialog,
-            editEntity: null
-        })
+        e.stopPropagation();
+        this.props.dispatch(setCategoryProcessorAction(this.props.category.get("id"), this.props.categoryBlank));
     }
 
     putInToCategory(e) {
         e.stopPropagation();
-        let {serviceActions, categoryData} = this.props;
-        let {categoryId, todoId} = this.props.params;
-        serviceActions.changeCategory(todoId, categoryId, categoryData.id);
+
     }
 
-    activateCategory(e){
+    activateCategory(e) {
         e.stopPropagation();
-        this.setState({isActivate: true});
-        let location = this.props.location;
-        location.pathname = "category-list/" + this.props.categoryData.id;
-        this.props.router.push(location)
+        this.props.dispatch(push("category-list/" + this.props.category.get("id")));
     }
 
-    componentWillMount(){
-        this.setState({isActivate: this.props.categoryData.id == this.props.params.categoryId});
+    removeCategory(e) {
+        e.stopPropagation();
+        this.props.dispatch(removeCategoryAction(this.props.category.get("id")))
     }
 
-    componentWillReceiveProps(){
-        this.setState({isActivate: this.props.categoryData.id == this.props.params.categoryId});
+    componentWillReceiveProps() {
+        this.setState({isActivate: this.props.category.get("id") === +this.props.params.categoryId});
     }
 
     render() {
-        let {serviceActions, categoryData, parentId} = this.props;
-
-        let childrenTree = serviceActions.createCategoryTree(serviceActions, categoryData.categories, categoryData.id);
-        let toggleEvents = {
-            openEditDialog: this.openEditDialog,
-            openAddDialog: this.openAddDialog,
-        };
-
-        let isNotChildrenTreeEmpty = childrenTree.some((item) => {
-            return !!item;
-        });
+        let {category, createCategoryArray} = this.props;
+        let childrenTree = createCategoryArray(category.get("categories"));
+        let isNotChildrenTreeEmpty = childrenTree.some(item => !!item);
 
         return (
             <span className={"category " + (this.state.isActivate ? 'active' : "")} onClick={this.activateCategory}>
@@ -109,9 +96,9 @@ export class Category extends React.Component {
                                             <NavigationExpandMore onClick={this.expandCategory}/>}
                                     </IconButton> : ""}
                             </div>
-                            {categoryData.title}
+                            {category.get("title")}
                         </div>
-                        {this.props.params.todoId ?
+                        {!!this.props.categoryData.get("editingTodo") ?
                             <div className="actions">
                                 <div className="put-to-this-category">
                                     <IconButton>
@@ -127,9 +114,7 @@ export class Category extends React.Component {
                                 </div>
                                 <div className="remove">
                                     <IconButton>
-                                        <ActionDeleteForever onClick={(e) => {
-                                            serviceActions.removeCategory(parentId, categoryData.id, e)
-                                        }}/>
+                                        <ActionDeleteForever onClick={this.removeCategory}/>
                                     </IconButton>
                                 </div>
                                 <div className="add">
@@ -142,18 +127,11 @@ export class Category extends React.Component {
                     </div>
                 }/>
                 <div
-                    className={(categoryData.categories ? 'children ' : '') + (this.state.isChildrenCollapsed ? 'collapsed' : '')}>
+                    className={(category.get("categories") ? 'children ' : '') + (this.state.isChildrenCollapsed ? 'collapsed' : '')}>
                     {childrenTree}
                 </div>
-                <AddInputStringDialog
-                    editEntity={this.state.editEntity}
-                    parentId={categoryData.id}
-                    isOpened={this.state.addEditDialog}
-                    toggleEvents={toggleEvents}
-                    addEvent={serviceActions.addCategoryTitle}
-                    editEvent={serviceActions.editCategory}
-                />
             </span>
         )
     }
 }
+
