@@ -10,6 +10,7 @@ export default class DataService{
             {
                 id: 1,
                 title: "Category #1",
+                isDeleted: false,
                 todoList: [
                     {
                         id: 1,
@@ -34,6 +35,7 @@ export default class DataService{
                     {
                         id: 2,
                         title: "Category #2",
+                        isDeleted: false,
                         todoList: [
                             {
                                 id: 4,
@@ -47,6 +49,7 @@ export default class DataService{
                     {
                         id: 3,
                         title: "Category #3",
+                        isDeleted: false,
                         todoList: [
                             {
                                 id: 5,
@@ -59,6 +62,7 @@ export default class DataService{
                             {
                                 id: 4,
                                 title: "Category #4",
+                                isDeleted: false,
                                 todoList: [
                                     {
                                         id: 6,
@@ -76,6 +80,7 @@ export default class DataService{
             {
                 id: 5,
                 title: "Category #5",
+                isDeleted: false,
                 todoList: [
                     {
                         id: 7,
@@ -100,6 +105,7 @@ export default class DataService{
                     {
                         id: 6,
                         title: "Category #6",
+                        isDeleted: false,
                         todoList: [
                             {
                                 id: 10,
@@ -113,6 +119,7 @@ export default class DataService{
                     {
                         id: 7,
                         title: "Category #7",
+                        isDeleted: false,
                         todoList: [
                             {
                                 id: 11,
@@ -125,6 +132,7 @@ export default class DataService{
                             {
                                 id: 8,
                                 title: "Category #8",
+                                isDeleted: false,
                                 todoList: [
                                     {
                                         id: 12,

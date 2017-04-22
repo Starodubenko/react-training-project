@@ -13,7 +13,10 @@ import {connect} from "react-redux";
 
 import "./Category.scss";
 import {push} from "react-router-redux";
-import {removeCategoryAction, setCategoryProcessorAction} from "../../../redux/actions/CategoryActions/CategoryActions";
+import {
+    putTodoInCategoryAction, removeCategoryAction,
+    setCategoryProcessorAction
+} from "../../../redux/actions/CategoryActions/CategoryActions";
 const { List } = require('immutable')
 
 @connect((store, props) => {
@@ -61,7 +64,8 @@ export class Category extends React.Component {
 
     putInToCategory(e) {
         e.stopPropagation();
-
+        let {categoryId, todoId} = this.props.params;
+        this.dispatch(putTodoInCategoryAction(todoId, categoryId, this.props.category.get("id")));
     }
 
     activateCategory(e) {

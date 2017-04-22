@@ -11,7 +11,8 @@ const getFilteredCategoryMap = createSelector(
     getFilter,
     (todoMap, categoryMap, filter) => {
         return categoryMap.filter((category) => {
-            return !filter.get("filterString") || category.get("todoList").some(todoId => todoMap.get("" + todoId))
+            return !filter.get("filterString") && !category.get("isDeleted") ||
+                !category.get("isDeleted") && category.get("todoList").some(todoId => todoMap.get("" + todoId))
         });
     }
 );

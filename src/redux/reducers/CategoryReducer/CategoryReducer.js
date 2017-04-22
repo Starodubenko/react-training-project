@@ -11,7 +11,7 @@ import { fromJS, Map } from 'immutable'
 
 const initialState = fromJS({
     categoryData: null,
-    categoryBlank: {id: null, title: "", todoList: [], categories: []},
+    categoryBlank: {id: null, title: "", isDeleted: false, todoList: [], categories: []},
     todoBlank: {id: null, title: "", isDone: false, description: ""},
     processingCategory: null,
     processingCategoryParentId: null,

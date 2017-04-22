@@ -51,30 +51,17 @@ export function saveCategoryAction(parentId, category) {
     };
 }
 
-const updateCategory = (updatedData, categoryEntity) =>{
-    return updatedData.setIn(["entities", "category", categoryEntity.get("id")], categoryEntity);
-};
-
-const addCategory = (updatedData, parent, categoryEntity) =>{
-    let result = null;
-    let newId = +categoryEntity.get("id");
-    let parentSubCategoryList = updatedData.getIn(["entities", "category", "" + parent, "categories"]);
-    if (parentSubCategoryList){
-        parentSubCategoryList = parentSubCategoryList.push(newId);
-        result = updatedData.setIn(["entities", "category", "" + parent, "categories"], parentSubCategoryList);
-    } else {
-        parentSubCategoryList = updatedData.getIn(["result"]);
-        parentSubCategoryList = parentSubCategoryList.push(newId);
-        result = updatedData.setIn(["result"], parentSubCategoryList);
-    }
-    return result.setIn(["entities", "category", "" + newId], categoryEntity);
-};
-
 export function removeCategoryAction(id) {
     return (dispatch, getState) => {
-        let updatedCategoryData = getState().category;
+        let updatedData = getState().category.get("categoryData");
+        return dispatch(setCategoryListAction(removeCategoryTree(updatedData, id)));
+    };
+}
 
-        return dispatch(setCategoryListAction(updatedCategoryData));
+export function putTodoInCategoryAction(toDoId, fromCategoryId, toCategoryId) {
+    return (dispatch, getState) => {
+        let updatedData = getState().category.get("categoryData");
+        return dispatch(setCategoryListAction(moveTodo(updatedData, toDoId, fromCategoryId, toCategoryId)));
     };
 }
 
@@ -101,3 +88,47 @@ export function setCategoryErrorAction() {
         payload: null
     }
 }
+
+const moveTodo = (updatedData, toDoId, fromCategoryId, toCategoryId) =>{
+    let fromTodoIds = updatedData.getIn(["entities", "category", fromCategoryId, "todoList"]);
+    fromTodoIds.splice(fromTodoIds.indexOf(toDoId),1);
+    let toTodoIds = updatedData.getIn(["entities", "category", toCategoryId, "todoList"]);
+    toTodoIds.push(toDoId);
+    let result = updatedData.setIn(["entities", "category", fromCategoryId, "todoList"], fromTodoIds);
+    result = updatedData.setIn(["entities", "category", toCategoryId, "todoList"], toTodoIds);
+    return result;
+};
+
+const removeCategoryTree = (updatedData, categoryId) => {
+    let result = updatedData;
+    let removingCategory = updatedData.getIn(["entities", "category", "" + categoryId]);
+    let subCategoryIds = removingCategory.get("categories");
+    if (subCategoryIds.size){
+        subCategoryIds.forEach(subCategoryId => result = removeCategoryTree(result, subCategoryId));
+        removingCategory = removingCategory.set("isDeleted", true);
+        result = result.setIn(["entities", "category", "" + categoryId], removingCategory);
+    } else {
+        removingCategory = removingCategory.set("isDeleted", true);
+        result = updatedData.setIn(["entities", "category", "" + categoryId], removingCategory);
+    }
+    return result;
+};
+
+const updateCategory = (updatedData, categoryEntity) =>{
+    return updatedData.setIn(["entities", "category", categoryEntity.get("id")], categoryEntity);
+};
+
+const addCategory = (updatedData, parent, categoryEntity) =>{
+    let result = null;
+    let newId = +categoryEntity.get("id");
+    let parentSubCategoryList = updatedData.getIn(["entities", "category", "" + parent, "categories"]);
+    if (parentSubCategoryList){
+        parentSubCategoryList = parentSubCategoryList.push(newId);
+        result = updatedData.setIn(["entities", "category", "" + parent, "categories"], parentSubCategoryList);
+    } else {
+        parentSubCategoryList = updatedData.getIn(["result"]);
+        parentSubCategoryList = parentSubCategoryList.push(newId);
+        result = updatedData.setIn(["result"], parentSubCategoryList);
+    }
+    return result.setIn(["entities", "category", "" + newId], categoryEntity);
+};
