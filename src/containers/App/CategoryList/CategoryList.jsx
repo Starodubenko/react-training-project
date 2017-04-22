@@ -141,7 +141,7 @@ export class CategoryList extends React.Component {
                         </div>
                     </div>
                     <div className="right">
-                        {/*{this.props.children}*/}
+                        {this.props.children}
                     </div>
                 </div>
                 <AddInputStringDialog entity={this.props.processingCategory} parentId={this.props.processingCategoryParentId}/>

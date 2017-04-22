@@ -207,4 +207,22 @@ export default class DataService{
             }, 1000);
         });
     }
+
+    addTodo(parent, category){
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve({id:Math.round(Math.random() * 10000)});
+            }, 1000);
+        });
+    }
+
+    updateTodo(todo){
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(true);
+            }, 1000);
+        });
+    }
+
+
 };

@@ -3,10 +3,15 @@ import {AddInputString, TodoItem} from "../../../../components";
 import {connect} from "react-redux";
 
 import "./TodoList.scss";
+import {saveTodoAction} from "../../../../redux/actions/TodoActions/TodoActions";
+import {getFilteredTodoMap} from "../../../../redux/selectors/TodoSelector/TodoSelector";
+import {getFilteredCategoryMap} from "../../../../redux/selectors/CategorySelector/CategorySelector";
 
 @connect((store) => {
     return {
-
+        filteredTodoMap: getFilteredTodoMap(store),
+        filteredCategoryMap: getFilteredCategoryMap(store),
+        todoBlank: store.category.get("todoBlank"),
     }
 })
 export class TodoList extends React.Component {
@@ -19,14 +24,12 @@ export class TodoList extends React.Component {
 
     addItem(text) {
         let {categoryId} = this.props.routeParams;
-        let {addTodoItem} =this.props.todoActions;
-        addTodoItem(null, categoryId, text);
+        let newTodo = this.props.todoBlank;
+        this.props.dispatch(saveTodoAction(categoryId, newTodo.set("title", text)));
     }
 
     editItem(updatedTodo) {
-        let {addTodoItem} = this.props.todoActions;
-        addTodoItem(updatedTodo);
-        console.log("The item is being edited");
+        this.props.dispatch(saveTodoAction(null, updatedTodo));
     }
 
     componentWillMount(){
@@ -35,10 +38,12 @@ export class TodoList extends React.Component {
 
     render() {
         let {categoryId} = this.props.routeParams;
-        let category = this.state.data.entities.category[categoryId];
-        let todoList = category ? category.todoList.map((id)=> {
-            if (this.props.data.entities.todo[id]){
-                return <TodoItem {...this.props} key={id} data={this.state.data.entities.todo[id]} editItem={this.editItem}/>
+        let category = this.props.filteredCategoryMap.get("" + categoryId);
+        let self = this;
+        let todoList = category ? category.get("todoList").map((id)=> {
+            let todo = this.props.filteredTodoMap.get("" + id);
+            if (todo){
+                return <TodoItem {...this.props} key={id} data={todo} editItem={this.editItem}/>
             }
         }) : null;
 
@@ -56,7 +61,7 @@ export class TodoList extends React.Component {
                 <div className="item-list">
                     {todoList}
                 </div>
-                {editChildren}
+                {/*{editChildren}*/}
             </div>
         )
     }

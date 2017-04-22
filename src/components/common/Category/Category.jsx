@@ -17,7 +17,6 @@ import {
     putTodoInCategoryAction, removeCategoryAction,
     setCategoryProcessorAction
 } from "../../../redux/actions/CategoryActions/CategoryActions";
-const { List } = require('immutable')
 
 @connect((store, props) => {
     return {
