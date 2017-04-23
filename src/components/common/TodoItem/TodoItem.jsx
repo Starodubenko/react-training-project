@@ -8,7 +8,7 @@ import "./TodoItem.scss"
 
 @connect((store) => {
     return {
-        router: store.router,
+        routing: store.routing,
         categoryData: store.category.get("categoryData"),
     }
 })
@@ -29,7 +29,7 @@ export class TodoItem extends React.Component {
 
     goToEdit(e){
         e.stopPropagation();
-        this.props.router.push("category-list/" + this.state.categoryId + "/edit/" + this.state.data.get("id"));
+        this.props.router.push("category-list/" + this.state.categoryId + "/edit/" + this.state.todo.get("id"));
     }
 
     markTodoAsDone(e){

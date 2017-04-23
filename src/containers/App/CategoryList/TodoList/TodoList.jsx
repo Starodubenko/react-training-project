@@ -19,17 +19,12 @@ export class TodoList extends React.Component {
     constructor() {
         super();
         this.addItem = this.addItem.bind(this);
-        this.editItem = this.editItem.bind(this);
     }
 
     addItem(text) {
         let {categoryId} = this.props.routeParams;
         let newTodo = this.props.todoBlank;
         this.props.dispatch(saveTodoAction(categoryId, newTodo.set("title", text)));
-    }
-
-    editItem(updatedTodo) {
-        this.props.dispatch(saveTodoAction(null, updatedTodo));
     }
 
     componentWillMount(){
@@ -47,13 +42,13 @@ export class TodoList extends React.Component {
             }
         }) : null;
 
-        let editChildren = React.Children.map(this.props.children, (child) => {
-            return React.cloneElement(child, {
-                todos: this.state.data.entities.todo,
-                previousLocation: this.props.router.getCurrentLocation(),
-                editItem: this.editItem
-            })
-        });
+        // let editChildren = React.Children.map(this.props.children, (child) => {
+        //     return React.cloneElement(child, {
+        //         todos: this.state.todo.entities.todo,
+        //         previousLocation: this.props.router.getCurrentLocation(),
+        //         editItem: this.editItem
+        //     })
+        // });
 
         return (
             <div className="todo-list">
@@ -61,7 +56,7 @@ export class TodoList extends React.Component {
                 <div className="item-list">
                     {todoList}
                 </div>
-                {/*{editChildren}*/}
+                {this.props.children}
             </div>
         )
     }

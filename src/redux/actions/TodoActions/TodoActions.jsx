@@ -54,7 +54,7 @@ export function saveTodoAction(categoryId, todo) {
 }
 
 const updateTodo = (updatedData, todo) => {
-    return updatedData.setIn(["entities", "todoList", todo.get("id")], todo);
+    return updatedData.setIn(["entities", "todo", "" + todo.get("id")], todo);
 };
 
 const addTodo = (updatedData, categoryId, todo) => {
