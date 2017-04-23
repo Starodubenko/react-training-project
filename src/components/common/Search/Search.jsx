@@ -32,8 +32,7 @@ export class Search extends React.Component {
     clearSearchString() {
         // delete this.props.location.query.filterString;
         this.setState({filterString: ""});
-        this.props.onFilterChange();
-        this.dispatch(cleanFilterStringAction())
+        this.props.dispatch(cleanFilterStringAction())
     }
 
     onChangeHandler(e, newValue) {
@@ -44,26 +43,18 @@ export class Search extends React.Component {
         //     delete this.props.location.query.filterString;
         // }
         // this.props.router.push(this.props.location);
-        // this.props.onFilterChange();
-        this.dispatch(setFilterStringAction(newValue))
+
+        this.props.dispatch(setFilterStringAction(newValue))
     }
 
     markToShowDone(e) {
         this.setState({isShownDoneItems: e.target.checked});
         // this.props.location.query.isShownDoneItems = e.target.checked;
         // this.props.router.push(this.props.location);
-        // this.props.onFilterChange();
-        this.dispatch(setDoneCheckBoxAction(e.target.checked))
-    }
-
-    componentWillMount(){
-
+        this.props.dispatch(setDoneCheckBoxAction(e.target.checked))
     }
 
     render() {
-        // let isShownDoneItems = typeof this.state.isShownDoneItems == "string" ?
-        //     this.state.isShownDoneItems == "true" :
-        //     this.state.isShownDoneItems;
 
         return (
             <div className="search">

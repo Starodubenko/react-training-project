@@ -8,10 +8,12 @@ import {getResult} from "../../../redux/selectors/ResultSelector/ResultSelector"
 import "./CategoryList.scss";
 import {AddInputStringDialog} from "../../../components/common/AddInputStringDialog/AddInputStringDialog";
 import {saveCategoryAction} from "../../../redux/actions/CategoryActions/CategoryActions";
+import {getTodoMap} from "../../../redux/selectors/TodoSelector/TodoSelector";
 
 @connect((store, props) => {
     return {
         filteredCategoryMap: getFilteredCategoryMap(store),
+        getTodoMap: getTodoMap(store),
         processingCategory: store.category.get("processingCategory"),
         processingCategoryParentId: store.category.get("processingCategoryParentId"),
         categoryBlank: store.category.get("categoryBlank"),
@@ -105,13 +107,12 @@ export class CategoryList extends React.Component {
     }
 
     calculateDonePercentage() {
-        let todoCount = Object.keys(this.props.originalData.entities.todo).length;
+        let todoCount = this.props.getTodoMap.size;
         let doneTodoCount = 0;
-        Object.keys(this.props.data.entities.todo).forEach((item) => {
-            if (this.props.data.entities.todo[item].isDone === true) {
-                doneTodoCount += 1
-            }
-        });
+        this.props.getTodoMap.valueSeq().reduce((collector, item) => {
+            if (item.get("isDone")) {doneTodoCount += 1}
+            return collector;
+        }, doneTodoCount);
         return Math.round(100 * doneTodoCount / todoCount);
     }
 
@@ -132,7 +133,7 @@ export class CategoryList extends React.Component {
         return (
             <div className="todo-list">
                 <LinearProgress mode="determinate" color={"#37FF01"} style={{height: '15px', backgroundColor: 'white'}}
-                                value={50}/>
+                                value={this.calculateDonePercentage()}/>
                 <div className="content">
                     <div className="left">
                         <AddInputString hint={"Enter category title"} addEvent={this.addCategoryTitle}/>

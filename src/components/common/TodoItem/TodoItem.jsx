@@ -33,16 +33,9 @@ export class TodoItem extends React.Component {
     }
 
     markTodoAsDone(e){
+        let currentStatus = this.state.todo.get("isDone");
+        this.setState({todo: this.state.todo.set("isDone", !currentStatus)});
         this.props.dispatch(toggleTodoDoneStatusAction(this.state.todo.get("id")));
-    }
-
-    componentWillReceiveProps(){
-        let {categoryId} = this.props.params;
-        let {data} = this.props;
-        this.state = {
-            categoryId: categoryId,
-            todo: data,
-        };
     }
 
     render() {

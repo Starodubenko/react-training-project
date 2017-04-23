@@ -11,10 +11,27 @@ const getFilteredCategoryMap = createSelector(
     getFilter,
     (todoMap, categoryMap, filter) => {
         return categoryMap.filter((category) => {
-            return !filter.get("filterString") && !category.get("isDeleted") ||
-                !category.get("isDeleted") && category.get("todoList").some(todoId => todoMap.get("" + todoId))
+            return detectShownCategory(todoMap, categoryMap, filter, category);
         });
     }
 );
+
+const detectShownCategory = (todoMap, categoryMap, filter, category) => {
+  let subCategoryIds = category.get("categories");
+  if (subCategoryIds.size){
+      let isSubCategoriesShown = subCategoryIds.some(subCategoryId => detectShownCategory(todoMap, categoryMap, filter, categoryMap.get("" + subCategoryId)));
+      return !isSubCategoriesShown ?
+          !category.get("isDeleted") && (
+              !filter.get("filterString") ||
+              category.get("todoList").some(todoId => todoMap.get("" + todoId))
+          ) : isSubCategoriesShown;
+
+  } else {
+      return !category.get("isDeleted") && (
+          !filter.get("filterString") ||
+          category.get("todoList").some(todoId => todoMap.get("" + todoId))
+      )
+  }
+};
 
 export {getCategoryMap, getFilteredCategoryMap}
