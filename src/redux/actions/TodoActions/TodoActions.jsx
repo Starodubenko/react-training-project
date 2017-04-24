@@ -28,10 +28,14 @@ export function setTodoListAction(data){
 
 export function toggleTodoDoneStatusAction(id) {
     return (dispatch, getState) => {
+        let dataService = DataService.getInstance();
         let updatedData = getState().category.get("categoryData");
         let todo = updatedData.getIn(["entities", "todo", "" + id]);
         let result = updatedData.setIn(["entities", "todo", "" + todo.get("id")], todo.set("isDone", !todo.get("isDone")));
-        return dispatch(setTodoListAction(result));
+        return dataService.updateTodo(todo)
+            .then(data => {
+                return dispatch(setTodoListAction(result));
+            });
     };
 }
 

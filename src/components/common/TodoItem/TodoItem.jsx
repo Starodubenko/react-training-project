@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Checkbox, IconButton, Paper} from "material-ui";
+import {Checkbox, CircularProgress, IconButton, LinearProgress, Paper, RefreshIndicator} from "material-ui";
 import {EditorModeEdit} from "material-ui/svg-icons/index";
 import {connect} from "react-redux";
 import {toggleTodoDoneStatusAction} from "../../../redux/actions/TodoActions/TodoActions.jsx"
@@ -21,6 +21,7 @@ export class TodoItem extends React.Component {
         this.state = {
             categoryId: categoryId,
             todo: data,
+            isDoneToggling: false
         };
 
         this.goToEdit = this.goToEdit.bind(this);
@@ -34,8 +35,12 @@ export class TodoItem extends React.Component {
 
     markTodoAsDone(e){
         let currentStatus = this.state.todo.get("isDone");
-        this.setState({todo: this.state.todo.set("isDone", !currentStatus)});
+        this.setState({todo: this.state.todo.set("isDone", !currentStatus), isDoneToggling: true});
         this.props.dispatch(toggleTodoDoneStatusAction(this.state.todo.get("id")));
+    }
+
+    componentWillReceiveProps(){
+        this.setState({isDoneToggling: false})
     }
 
     render() {
@@ -43,7 +48,8 @@ export class TodoItem extends React.Component {
             <Paper zDepth={1} children={
                 <div className="todo-item">
                     <div className="title">
-                        <Checkbox label={this.state.todo.get("title")} checked={this.state.todo.get("isDone")} onCheck={this.markTodoAsDone}/>
+                        {this.state.isDoneToggling ? <CircularProgress size={40} thickness={1}/> :
+                        <Checkbox label={this.state.todo.get("title")} checked={this.state.todo.get("isDone")} onCheck={this.markTodoAsDone}/>}
                     </div>
                     <div className="actions">
                         <div className="edit">
