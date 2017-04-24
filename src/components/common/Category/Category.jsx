@@ -1,5 +1,5 @@
 import * as React from "react";
-import {IconButton, Paper} from "material-ui";
+import {Dialog, FlatButton, IconButton, Paper} from "material-ui";
 import {
     EditorModeEdit,
     ActionDeleteForever,
@@ -30,7 +30,8 @@ export class Category extends React.Component {
         super(props);
         this.state = {
             isChildrenCollapsed: true,
-            isActivate: props.category.get("id") === +this.props.params.categoryId
+            isActivate: props.category.get("id") === +this.props.params.categoryId,
+            isDeleteDialogShown: false
         };
         this.expandCategory = this.expandCategory.bind(this);
         this.openAddDialog = this.openAddDialog.bind(this);
@@ -38,6 +39,8 @@ export class Category extends React.Component {
         this.putInToCategory = this.putInToCategory.bind(this);
         this.activateCategory = this.activateCategory.bind(this);
         this.removeCategory = this.removeCategory.bind(this);
+        this.showRemoveCategoryDialog = this.showRemoveCategoryDialog.bind(this);
+        this.hideRemoveCategoryDialog = this.hideRemoveCategoryDialog.bind(this);
     }
 
     expandCategory(e) {
@@ -72,9 +75,18 @@ export class Category extends React.Component {
         this.props.dispatch(push("category-list/" + this.props.category.get("id")));
     }
 
-    removeCategory(e) {
+    removeCategory() {
+        this.props.dispatch(removeCategoryAction(this.props.category.get("id")));
+        this.setState({isDeleteDialogShown: false})
+    }
+
+    showRemoveCategoryDialog(e) {
         e.stopPropagation();
-        this.props.dispatch(removeCategoryAction(this.props.category.get("id")))
+        this.setState({isDeleteDialogShown: true})
+    }
+
+    hideRemoveCategoryDialog() {
+        this.setState({isDeleteDialogShown: false})
     }
 
     componentWillReceiveProps() {
@@ -85,6 +97,20 @@ export class Category extends React.Component {
         let {category, createCategoryArray} = this.props;
         let childrenTree = createCategoryArray(category.get("categories"));
         let isNotChildrenTreeEmpty = childrenTree.some(item => !!item);
+
+        const actions = [
+            <FlatButton
+                label="Cancel"
+                primary={true}
+                onTouchTap={this.hideRemoveCategoryDialog}
+            />,
+            <FlatButton
+                label="Delete"
+                primary={true}
+                keyboardFocused={true}
+                onTouchTap={this.removeCategory}
+            />,
+        ];
 
         return (
             <span className={"category " + (this.state.isActivate ? 'active' : "")} onClick={this.activateCategory}>
@@ -117,7 +143,7 @@ export class Category extends React.Component {
                                 </div>
                                 <div className="remove">
                                     <IconButton>
-                                        <ActionDeleteForever onClick={this.removeCategory}/>
+                                        <ActionDeleteForever onClick={this.showRemoveCategoryDialog}/>
                                     </IconButton>
                                 </div>
                                 <div className="add">
@@ -133,6 +159,15 @@ export class Category extends React.Component {
                     className={(category.get("categories") ? 'children ' : '') + (this.state.isChildrenCollapsed ? 'collapsed' : '')}>
                     {childrenTree}
                 </div>
+                <Dialog
+                    title="Confirming dialog"
+                    actions={actions}
+                    modal={false}
+                    open={this.state.isDeleteDialogShown}
+                    onRequestClose={this.hideRemoveCategoryDialog}
+                >
+                    Do you want to delete this category?
+                </Dialog>
             </span>
         )
     }
