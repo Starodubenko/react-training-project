@@ -40,7 +40,6 @@ export class TodoList extends React.Component {
                 return <TodoItem {...this.props} key={id} data={todo} editItem={this.editItem}/>
             }
         }) : null;
-
         return (
             <div className="todo-list">
                 <AddInputString hint={"Enter item title"} addEvent={this.addItem} isRightHorAlignment={true}/>

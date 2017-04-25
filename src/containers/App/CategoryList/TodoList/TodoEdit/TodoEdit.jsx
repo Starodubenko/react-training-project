@@ -1,14 +1,17 @@
 import * as React from "react";
-import {Checkbox, FlatButton, LinearProgress, Paper, TextField} from "material-ui";
+import {Checkbox, CircularProgress, FlatButton, LinearProgress, Paper, TextField} from "material-ui";
 import {connect} from "react-redux";
 
 import "./TodoEdit.scss"
 import {getFilteredTodoMap, getTodoMap} from "../../../../../redux/selectors/TodoSelector/TodoSelector";
-import {saveTodoAction} from "../../../../../redux/actions/TodoActions/TodoActions";
+import {saveTodoAction, startTodoProcessingAction} from "../../../../../redux/actions/TodoActions/TodoActions";
+import {push, goBack} from "react-router-redux"
 
 @connect((store) => {
+    debugger;
     return {
         filteredTodoMap: getFilteredTodoMap(store),
+        isTodoProcessing: store.category.get("isTodoProcessing"),
     }
 })
 export class TodoEdit extends React.Component {
@@ -26,16 +29,16 @@ export class TodoEdit extends React.Component {
     }
 
     onCancelHandler() {
-        this.props.router.goBack();
+        this.props.dispatch(goBack());
     }
 
     navigateBackTodoList() {
-        this.props.router.push("category-list/" + this.props.params.categoryId);
+        this.props.dispatch(push({ pathname: "category-list/" + this.props.params.categoryId}));
     }
 
     onSaveHandler() {
-        debugger;
-        this.props.dispatch(saveTodoAction(null, this.state.todoData));
+        this.props.dispatch(startTodoProcessingAction());
+        this.props.dispatch(saveTodoAction(null, this.state.todoData, "category-list/" + this.props.params.categoryId));
     }
 
     onTitleChange(e) {
@@ -64,6 +67,7 @@ export class TodoEdit extends React.Component {
     render() {
         return (
             <Paper className="todo-edit" zDepth={1} children={
+                !this.props.isTodoProcessing ?
                 <div>
                     <div className="actions">
                         <FlatButton label="Back to todo list" onClick={this.navigateBackTodoList}/>
@@ -86,6 +90,9 @@ export class TodoEdit extends React.Component {
                                rowsMax={20}
                                style={{'width': '100%'}}
                     />
+                </div> :
+                <div className="spinner-container">
+                    <CircularProgress size={80} thickness={2}/>
                 </div>
             }/>
         )

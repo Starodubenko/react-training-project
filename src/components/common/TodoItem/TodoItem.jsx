@@ -2,7 +2,8 @@ import * as React from "react";
 import {Checkbox, CircularProgress, IconButton, LinearProgress, Paper, RefreshIndicator} from "material-ui";
 import {EditorModeEdit} from "material-ui/svg-icons/index";
 import {connect} from "react-redux";
-import {toggleTodoDoneStatusAction} from "../../../redux/actions/TodoActions/TodoActions.jsx"
+import {toggleTodoDoneStatusAction} from "../../../redux/actions/TodoActions/TodoActions.jsx";
+import {push} from "react-router-redux";
 
 import "./TodoItem.scss"
 
@@ -30,7 +31,7 @@ export class TodoItem extends React.Component {
 
     goToEdit(e){
         e.stopPropagation();
-        this.props.router.push("category-list/" + this.state.categoryId + "/edit/" + this.state.todo.get("id"));
+        this.props.dispatch(push({ pathname: "category-list/" + this.state.categoryId + "/edit/" + this.state.todo.get("id")}));
     }
 
     markTodoAsDone(e){
@@ -39,8 +40,8 @@ export class TodoItem extends React.Component {
         this.props.dispatch(toggleTodoDoneStatusAction(this.state.todo.get("id")));
     }
 
-    componentWillReceiveProps(){
-        this.setState({isDoneToggling: false})
+    componentWillReceiveProps(nextProps){
+        this.setState({isDoneToggling: false, todo: nextProps.data})
     }
 
     render() {

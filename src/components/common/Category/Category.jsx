@@ -129,11 +129,12 @@ export class Category extends React.Component {
                         </div>
                         {this.props.params.todoId ?
                             <div className="actions">
-                                <div className="put-to-this-category">
-                                    <IconButton>
-                                        <ContentReply onClick={this.putInToCategory}/>
-                                    </IconButton>
-                                </div>
+                                {this.props.params.categoryId != this.props.category.get("id") ?
+                                    <div className="put-to-this-category">
+                                        <IconButton>
+                                            <ContentReply onClick={this.putInToCategory}/>
+                                        </IconButton>
+                                    </div> : ""}
                             </div> :
                             <div className="actions">
                                 <div className="edit">

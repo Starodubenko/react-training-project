@@ -15,16 +15,20 @@
   animation-duration: 500ms;
   animation-name: slidein;
 
-
   &.open {
     transform: translateX(100%);
   }
 
-
-
   .actions{
     display: flex;
     justify-content: space-between;
+  }
+
+  .spinner-container{
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
+    align-items: center;
   }
 }
 

@@ -1,19 +1,11 @@
-import {SET_TODO_PROCESSOR, FREE_TODO_PROCESSOR, SET_CATEGORY_DATA} from "../../reducers/CategoryReducer/CategoryReducer"
+import {SET_CATEGORY_DATA, START_TODO_PROCESSING} from "../../reducers/CategoryReducer/CategoryReducer"
 import DataService from "../../../services/data.service";
+import {push} from "react-router-redux";
 
-export function setTodoToEditAction(id){
+export function startTodoProcessingAction(){
     return {
-        type: SET_TODO_PROCESSOR,
-        payload: {
-            todo: data
-        }
-    }
-}
-
-export function freeTodoEditAction(){
-  return {
-      type: FREE_TODO_PROCESSOR,
-      payload: null
+        type: START_TODO_PROCESSING,
+        payload: null
     }
 }
 
@@ -39,7 +31,7 @@ export function toggleTodoDoneStatusAction(id) {
     };
 }
 
-export function saveTodoAction(categoryId, todo) {
+export function saveTodoAction(categoryId, todo, redirectUrl = "") {
     return (dispatch, getState) => {
         let dataService = DataService.getInstance();
         let updatedData = getState().category.get("categoryData");
@@ -47,6 +39,11 @@ export function saveTodoAction(categoryId, todo) {
             dataService.updateTodo(todo)
                 .then(data => {
                     return dispatch(setTodoListAction(updateTodo(updatedData, todo)))
+                })
+                .then(data => {
+                    if (redirectUrl){
+                        return dispatch(push({ pathname: redirectUrl}))
+                    }
                 })
         } else {
             dataService.addTodo(todo)
