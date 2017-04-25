@@ -67,7 +67,7 @@ export class Category extends React.Component {
     putInToCategory(e) {
         e.stopPropagation();
         let {categoryId, todoId} = this.props.params;
-        this.dispatch(putTodoInCategoryAction(todoId, categoryId, this.props.category.get("id")));
+        this.props.dispatch(putTodoInCategoryAction(todoId, categoryId, this.props.category.get("id")));
     }
 
     activateCategory(e) {
@@ -127,7 +127,7 @@ export class Category extends React.Component {
                             </div>
                             {category.get("title")}
                         </div>
-                        {!!this.props.categoryData.get("editingTodo") ?
+                        {this.props.params.todoId ?
                             <div className="actions">
                                 <div className="put-to-this-category">
                                     <IconButton>

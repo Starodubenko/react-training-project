@@ -34,21 +34,12 @@ export class TodoList extends React.Component {
     render() {
         let {categoryId} = this.props.routeParams;
         let category = this.props.filteredCategoryMap.get("" + categoryId);
-        let self = this;
         let todoList = category ? category.get("todoList").map((id)=> {
             let todo = this.props.filteredTodoMap.get("" + id);
             if (todo){
                 return <TodoItem {...this.props} key={id} data={todo} editItem={this.editItem}/>
             }
         }) : null;
-
-        // let editChildren = React.Children.map(this.props.children, (child) => {
-        //     return React.cloneElement(child, {
-        //         todos: this.state.todo.entities.todo,
-        //         previousLocation: this.props.router.getCurrentLocation(),
-        //         editItem: this.editItem
-        //     })
-        // });
 
         return (
             <div className="todo-list">

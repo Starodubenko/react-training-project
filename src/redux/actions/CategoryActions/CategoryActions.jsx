@@ -90,12 +90,12 @@ export function setCategoryErrorAction() {
 }
 
 const moveTodo = (updatedData, toDoId, fromCategoryId, toCategoryId) =>{
-    let fromTodoIds = updatedData.getIn(["entities", "category", fromCategoryId, "todoList"]);
-    fromTodoIds.splice(fromTodoIds.indexOf(toDoId),1);
-    let toTodoIds = updatedData.getIn(["entities", "category", toCategoryId, "todoList"]);
-    toTodoIds.push(toDoId);
-    let result = updatedData.setIn(["entities", "category", fromCategoryId, "todoList"], fromTodoIds);
-    result = updatedData.setIn(["entities", "category", toCategoryId, "todoList"], toTodoIds);
+    let fromTodoIds = updatedData.getIn(["entities", "category", "" + fromCategoryId, "todoList"]);
+    fromTodoIds = fromTodoIds.splice(fromTodoIds.indexOf(+toDoId),1);
+    let toTodoIds = updatedData.getIn(["entities", "category", "" + toCategoryId, "todoList"]);
+    toTodoIds = toTodoIds.push(+toDoId);
+    let result = updatedData.setIn(["entities", "category", "" + fromCategoryId, "todoList"], fromTodoIds);
+    result = result.setIn(["entities", "category", "" + toCategoryId, "todoList"], toTodoIds);
     return result;
 };
 

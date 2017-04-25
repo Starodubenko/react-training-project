@@ -47,13 +47,12 @@ export class App extends React.Component {
         return (
             <div className="app">
                 <Header onFilterChange={this.onFilterChange}/>
-                <Content>{
-                        this.props.categoryData ? this.props.children :
+                <Content>
+                    {this.props.categoryData ? this.props.children :
                         <div className="spinner">
                             <CircularProgress size={80} thickness={5}/>
                         </div>}
                 </Content>
-                }
                 <Footer>
                 </Footer>
             </div>
