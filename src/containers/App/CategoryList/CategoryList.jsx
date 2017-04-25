@@ -44,14 +44,19 @@ export class CategoryList extends React.Component {
         }, []);
     }
 
-    calculateDonePercentage() {
+    calculateDonePercentage(brightnessPercentage) {
+        let result = {percentage: 0, red: 0, green: 0};
         let todoCount = this.props.getTodoMap.size;
         let doneTodoCount = 0;
         this.props.getTodoMap.valueSeq().reduce((collector, item) => {
             if (item.get("isDone")) {doneTodoCount += 1}
             return collector;
         }, doneTodoCount);
-        return Math.round(100 * doneTodoCount / todoCount);
+        brightnessPercentage = 255 * brightnessPercentage / 100;
+        result.percentage = Math.round(100 * doneTodoCount / todoCount);
+        result.red = result.percentage < 51 ? brightnessPercentage : Math.round((100 - (result.percentage - 50)) * brightnessPercentage / 100);
+        result.green = result.percentage < 51 ? Math.round(result.percentage * 2 * brightnessPercentage / 100) : brightnessPercentage;
+        return result;
     }
 
     changeCategory() {
@@ -67,11 +72,13 @@ export class CategoryList extends React.Component {
 
     render() {
         let categoryList = this.createCategoryArray(this.props.result);
-
+        let doneResult = this.calculateDonePercentage(100);
         return (
             <div className="todo-list">
-                <LinearProgress mode="determinate" color={"#37FF01"} style={{height: '15px', backgroundColor: 'white'}}
-                                value={this.calculateDonePercentage()}/>
+                <LinearProgress className="todo-progress" mode="determinate"
+                                color={"rgb(" + doneResult.red + ", " + doneResult.green + ", 0)"}
+                                style={{height: '15px', backgroundColor: 'white'}}
+                                value={doneResult.percentage}/>
                 <div className="content">
                     <div className="left">
                         <AddInputString hint={"Enter category title"} addEvent={this.addCategoryTitle}/>
