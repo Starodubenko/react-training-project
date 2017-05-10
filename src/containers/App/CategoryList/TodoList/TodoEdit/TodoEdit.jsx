@@ -8,7 +8,6 @@ import {saveTodoAction, startTodoProcessingAction} from "../../../../../redux/ac
 import {push, goBack} from "react-router-redux"
 
 @connect((store) => {
-    debugger;
     return {
         filteredTodoMap: getFilteredTodoMap(store),
         isTodoProcessing: store.category.get("isTodoProcessing"),
