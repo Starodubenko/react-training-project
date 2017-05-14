@@ -89,7 +89,7 @@ export function setCategoryErrorAction() {
     }
 }
 
-const moveTodo = (updatedData, toDoId, fromCategoryId, toCategoryId) =>{
+export function moveTodo(updatedData, toDoId, fromCategoryId, toCategoryId){
     let fromTodoIds = updatedData.getIn(["entities", "category", "" + fromCategoryId, "todoList"]);
     fromTodoIds = fromTodoIds.splice(fromTodoIds.indexOf(+toDoId),1);
     let toTodoIds = updatedData.getIn(["entities", "category", "" + toCategoryId, "todoList"]);
@@ -97,9 +97,9 @@ const moveTodo = (updatedData, toDoId, fromCategoryId, toCategoryId) =>{
     let result = updatedData.setIn(["entities", "category", "" + fromCategoryId, "todoList"], fromTodoIds);
     result = result.setIn(["entities", "category", "" + toCategoryId, "todoList"], toTodoIds);
     return result;
-};
+}
 
-const removeCategoryTree = (updatedData, categoryId) => {
+export function removeCategoryTree(updatedData, categoryId){
     let result = updatedData;
     let removingCategory = updatedData.getIn(["entities", "category", "" + categoryId]);
     let subCategoryIds = removingCategory.get("categories");
@@ -112,13 +112,13 @@ const removeCategoryTree = (updatedData, categoryId) => {
         result = updatedData.setIn(["entities", "category", "" + categoryId], removingCategory);
     }
     return result;
-};
+}
 
-const updateCategory = (updatedData, categoryEntity) =>{
+export function updateCategory(updatedData, categoryEntity){
     return updatedData.setIn(["entities", "category", categoryEntity.get("id")], categoryEntity);
-};
+}
 
-const addCategory = (updatedData, parent, categoryEntity) =>{
+export function addCategory(updatedData, parent, categoryEntity){
     let result = null;
     let newId = +categoryEntity.get("id");
     let parentSubCategoryList = updatedData.getIn(["entities", "category", "" + parent, "categories"]);
@@ -131,4 +131,4 @@ const addCategory = (updatedData, parent, categoryEntity) =>{
         result = updatedData.setIn(["result"], parentSubCategoryList);
     }
     return result.setIn(["entities", "category", "" + newId], categoryEntity);
-};
+}

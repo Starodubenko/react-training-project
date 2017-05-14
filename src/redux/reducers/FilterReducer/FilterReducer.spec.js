@@ -1,6 +1,6 @@
-import AuthReducer from "./FilterReducer"
+// import AuthReducer from "./FilterReducer"
 
-describe('Filter reducer test', () => {
+test('Filter reducer test', () => {
 
     it("If it's not correct action, reducer should leave default state", () => {
 
