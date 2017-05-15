@@ -1,80 +1,71 @@
-// import React from 'react';
-// import * as TestUtils from 'react-addons-test-utils';
-// import {before, beforeEach} from "mocha";
-// import { fromJS } from 'immutable'
-// import {moveTodo} from "./CategoryActions";
+import React from 'react';
+import * as TestUtils from 'react-dom/test-utils';
+import {fromJS} from 'immutable'
+import {moveTodo} from "./CategoryActions";
 
+let testCategoryData = null;
+let testCategory = null;
 
-test('Tests of main functions of category actions', () => {
+beforeAll(() => {
+    testCategory = fromJS({
+        categories: [],
+        id: 1,
+        isDeleted: false,
+        title: "",
+        todoList: []
+    })
+});
 
-    expect(3).toBe(3);
+beforeEach(() => {
+    testCategoryData = fromJS({
+        entities: {
+            category: {
+                1: {
+                    categories: [],
+                    id: 1,
+                    isDeleted: false,
+                    title: "",
+                    todoList: [1]
+                },
+                2: {
+                    categories: [],
+                    id: 1,
+                    isDeleted: false,
+                    title: "",
+                    todoList: []
+                }
+            },
+            todo: {
+                1: {
+                    description: "",
+                    id: 1,
+                    isDone: false,
+                    title: "Test todo 1"
+                }
+            }
+        },
+        result: []
+    })
+});
 
-    // let testCategoryData = null;
-    // let testCategory = null;
-    //
-    // before(() => {
-    //     testCategory = fromJS({
-    //         categories: [],
-    //         id: 1,
-    //         isDeleted: false,
-    //         title: "",
-    //         todoList: []
-    //     })
-    // });
-    //
-    // beforeEach(()=>{
-    //     testCategoryData = fromJS({
-    //         entities: {
-    //             category: {
-    //                 1: {
-    //                     categories: [],
-    //                     id: 1,
-    //                     isDeleted: false,
-    //                     title: "",
-    //                     todoList: [1]
-    //                 },
-    //                 2: {
-    //                     categories: [],
-    //                     id: 1,
-    //                     isDeleted: false,
-    //                     title: "",
-    //                     todoList: []
-    //                 }
-    //             },
-    //             todo: {
-    //                 1: {
-    //                     description: "",
-    //                     id: 1,
-    //                     isDone: false,
-    //                     title: "Test todo 1"
-    //                 }
-    //             }
-    //         },
-    //         result: []
-    //     })
-    // });
+test('move todo to from 1st to 2nd category', () => {
+    console.log("testCategory = " + testCategory);
+    console.log("testCategoryData = " + testCategoryData);
+    debugger;
+});
 
-    it ('move todo to from 1st to 2nd category', ()=>{
-        debugger;
-        // let resultData = moveTodo(testCategoryData, "1", 1, 2);
-        // expect(resultData.getIn(["entities", "category", "2", "todoList"])).toContain(1);
-    });
+test('add category to the first line', () => {
 
-    it ('add category to the first line', ()=>{
+});
 
-    });
+test('add category to the child line', () => {
 
-    it ('add category to the child line', ()=>{
+});
 
-    });
+test('update category title', () => {
 
-    it ('update category title', ()=>{
+});
 
-    });
-
-    it ('remove category', ()=>{
-
-    });
-
+test('remove category', () => {
 
 });
