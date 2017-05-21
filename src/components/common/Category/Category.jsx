@@ -67,7 +67,8 @@ export class Category extends React.Component {
     putInToCategory(e) {
         e.stopPropagation();
         let {categoryId, todoId} = this.props.params;
-        this.props.dispatch(putTodoInCategoryAction(todoId, categoryId, this.props.category.get("id")));
+        let moveTodoActionResult = putTodoInCategoryAction(todoId, categoryId, this.props.category.get("id"));
+        this.props.dispatch(moveTodoActionResult);
     }
 
     activateCategory(e) {

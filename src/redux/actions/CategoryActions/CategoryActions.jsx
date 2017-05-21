@@ -38,14 +38,16 @@ export function saveCategoryAction(parentId, category) {
         let dataService = DataService.getInstance();
         let updatedData = getState().category.get("categoryData");
         if (category.get("id")){
-            dataService.updateCategory(category)
+            return dataService.updateCategory(category)
                 .then(data => {
                     return dispatch(setCategoryListAction(updateCategory(updatedData, category)))
                 })
         } else {
-            dataService.addCategory(parentId, category)
+            return dataService.addCategory(parentId, category)
                 .then(data => {
-                    return dispatch(setCategoryListAction(addCategory(updatedData, parentId, category.set("id", data.id))))
+                    let categoryWithNewId = category.set("id", data.id);
+                    console.log("new category id = " + categoryWithNewId.get("id"));
+                    return dispatch(setCategoryListAction(addCategory(updatedData, parentId, categoryWithNewId)))
                 })
         }
     };
