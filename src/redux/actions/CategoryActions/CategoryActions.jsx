@@ -1,8 +1,6 @@
 import {
     START_CATEGORY_PROCESSING,
     SET_CATEGORY_DATA,
-    SET_CATEGORY_PROCESSOR,
-    FREE_CATEGORY_PROCESSOR,
     SET_CATEGORY_ERROR,
 } from "../../reducers/CategoryReducer/CategoryReducer";
 
@@ -84,10 +82,10 @@ export function freeCategoryProcessorAction() {
     }
 }
 
-export function setCategoryErrorAction() {
+export function setCategoryErrorAction(errorText) {
     return {
         type: SET_CATEGORY_ERROR,
-        payload: null
+        payload: errorText
     }
 }
 

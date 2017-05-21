@@ -29,8 +29,9 @@ const CategoryReducer = (state = initialState, action) => {
         }
         case SET_CATEGORY_ERROR: {
             return state.mergeDeep({
-                processing: false,
-                error: action.payload.error
+                error: action.payload.errorText,
+                isTodoProcessing: false,
+                isCategoryProcessing: false
             })
         }
         case SET_CATEGORY_DATA: {
