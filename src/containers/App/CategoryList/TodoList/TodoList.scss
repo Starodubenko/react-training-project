@@ -38,4 +38,24 @@
       }
     }
   }
+
+
+  .todo-enter {
+    transform: translateX(-50px);
+    opacity: 0;
+
+    .todo-enter-active {
+      transform: translateX(0px);
+      opacity: 1;
+    }
+  }
+
+  .todo-leave {
+    transform: translateX(0px);
+    opacity: 1;
+    .todo-leave-active {
+      transform: translateX(50px);
+      opacity: 0;
+    }
+  }
 }

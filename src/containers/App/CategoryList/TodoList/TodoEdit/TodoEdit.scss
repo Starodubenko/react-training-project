@@ -1,6 +1,6 @@
 @import "../../../../../global/styles/base";
 
-.todo-edit{
+.todo-edit {
   @extend .stretch-to-full-container-as-column;
   padding: 20px;
 
@@ -19,12 +19,12 @@
     transform: translateX(100%);
   }
 
-  .actions{
+  .actions {
     display: flex;
     justify-content: space-between;
   }
 
-  .spinner-container{
+  .spinner-container {
     display: flex;
     flex-grow: 1;
     justify-content: center;
@@ -33,7 +33,7 @@
 }
 
 @keyframes slidein {
-  0%{
+  0% {
     transform: translateX(100%);
   }
   100% {

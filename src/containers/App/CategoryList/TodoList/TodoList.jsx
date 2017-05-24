@@ -1,5 +1,6 @@
 import * as React from "react";
 import {AddInputString, TodoItem} from "../../../../components";
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {connect} from "react-redux";
 
 import "./TodoList.scss";
@@ -40,11 +41,19 @@ export class TodoList extends React.Component {
                 return <TodoItem {...this.props} key={id} data={todo} editItem={this.editItem}/>
             }
         }) : null;
+
+        let todoAnimation = {
+            transitionName: "todo",
+            transitionEnterTimeout: 500,
+            transitionLeaveTimeout: 0
+        };
         return (
             <div className="todo-list">
                 <AddInputString hint={"Enter item title"} addEvent={this.addItem} isRightHorAlignment={true}/>
                 <div className="item-list">
-                    {todoList}
+                    <ReactCSSTransitionGroup {...todoAnimation}>
+                        {todoList}
+                    </ReactCSSTransitionGroup>
                 </div>
                 {this.props.children}
             </div>
