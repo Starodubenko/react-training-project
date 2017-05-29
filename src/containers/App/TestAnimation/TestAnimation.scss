@@ -1,0 +1,17 @@
+@import "../../../global/styles/base";
+
+.test-animation-container {
+  @extend .stretch-to-full-container-as-column;
+
+  .item {
+    width: 40px;
+    height: 40px;
+    background-color: red;
+    transition: transform 2000ms ease-in;
+    transform: translateY(0px);
+
+    &:hover{
+      transform: translateY(100px);
+    }
+  }
+}

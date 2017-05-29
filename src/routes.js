@@ -1,6 +1,6 @@
 import React, {Component}from "react";
 import {Router, Route, hashHistory, IndexRedirect} from "react-router";
-import {NotFound, App, CategoryList, TodoList, TodoEdit} from "./containers";
+import {NotFound, App, CategoryList, TodoList, TodoEdit, TestAnimation} from "./containers";
 import { syncHistoryWithStore } from 'react-router-redux';
 import * as analyticsService from "react/lib/ReactDOMFactories";
 
@@ -18,6 +18,7 @@ export default class Routes extends Component{
                             <Route path="edit/:todoId" component={TodoEdit}/>
                         </Route>
                     </Route>
+                    <Route path="test-animation" component={TestAnimation}/>
                     <IndexRedirect to="/category-list" />
                 </Route>
                 <Route path="*" component={NotFound}/>

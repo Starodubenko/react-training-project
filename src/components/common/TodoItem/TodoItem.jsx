@@ -46,7 +46,7 @@ export class TodoItem extends React.Component {
 
     render() {
         return (
-            <Paper zDepth={1} children={
+            <Paper className="todo-item-wrapper" zDepth={1} children={
                 <div className="todo-item">
                     <div className="title">
                         {this.state.isDoneToggling ? <CircularProgress size={40} thickness={1}/> :

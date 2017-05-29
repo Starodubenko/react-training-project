@@ -4,6 +4,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import DataService from "../../services/data.service";
 import {connect} from "react-redux";
+import PropTypes from 'prop-types';
 
 injectTapEventPlugin();
 import "./App.scss"
@@ -26,7 +27,7 @@ export class App extends React.Component {
     }
 
     static childContextTypes = {
-        muiTheme: React.PropTypes.object
+        muiTheme: PropTypes.object
     };
 
     getChildContext() {

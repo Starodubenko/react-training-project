@@ -1,24 +1,46 @@
 @import "../../../global/styles/base";
 
-.todo-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 15px;
+.todo-item-wrapper {
 
-  .title {
-    display: flex;
-    align-items: center;
-    flex-grow: 1;
-    position: relative;
-    height: 42px;
+  &.todo-enter {
+    transform: translateX(-100%);
+    &.todo-enter-active {
+      position: relative !important;
+      left:0;
+      right: 0;
+      transition: transform 500ms cubic-bezier(.5,.5,.5,.5)!important;
+      transform: translateX(0%);
+    }
   }
 
-  .actions {
+  &.todo-leave {
+    transform: translateX(0%);
+    &.todo-leave-active {
+      transform: translateX(100%);
+      transition: transform 500ms ease-out!important;
+    }
+  }
+
+  .todo-item {
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
 
-    .edit {
+    .title {
+      display: flex;
+      align-items: center;
+      flex-grow: 1;
+      position: relative;
+      height: 42px;
+    }
 
+    .actions {
+      display: flex;
+
+      .edit {
+
+      }
     }
   }
 }
